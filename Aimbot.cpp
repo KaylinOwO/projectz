@@ -135,8 +135,8 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 
 	gCvars.iAimbotIndex = -1;
 
-	//if (gCvars.aimbot_mode == 2)
-	//BulletTime(pLocal);
+	if (gCvars.aimbot_mode == 2)
+	BulletTime(pLocal);
 
 	if (!gCvars.aimbot_active)
 		return;
