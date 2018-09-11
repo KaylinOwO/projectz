@@ -358,7 +358,7 @@ void CMenu::DrawTab(const char* strText, int iTabIndex)
 	int iBaseX = (iWidth / 4) * (iTabIndex - 1);
 	int iBaseW = iWidth / 4;
 
-	DrawRectM(iBaseX, 24, iBaseW, 28, iTab == iTabIndex ? Color(200, 5, 5, 255) : Color(93, 0, 114, 255));
+	DrawRectM(iBaseX, 24, iBaseW, 28, iTab == iTabIndex ? Color(53, 0, 96, 255) : Color(93, 0, 114, 255));
 	DrawStringM(iBaseX + (iBaseW / 2), 38, Color(255, 255, 255, 255), strText);
 
 	if (Hovering(iBaseX, 24, iBaseW, 28))
@@ -513,7 +513,7 @@ void CMenu::DrawButtons()
 		DrawButton("Anti-Aim", 4, 8, y += add, gCvars.misc_angles);
 
 		DrawDropdown("Pitch", 4, iWidth - 160, 270, add, aax, 4, gCvars.misc_aax);
-		DrawDropdown("Yaw", 4, iWidth - 58, 270, add, aay, 5, gCvars.misc_aay);
+		DrawDropdown("Yaw", 4, iWidth - 58, 270, add, aay, 7, gCvars.misc_aay);
 
 	}
 	else if (GAME_TF2)
@@ -522,7 +522,7 @@ void CMenu::DrawButtons()
 		DrawButton("Anti-Aim", 4, 8, y += add, gCvars.misc_angles);
 
 		DrawDropdown("Pitch", 4, iWidth - 160, 58, add, aax, 4, gCvars.misc_aax);
-		DrawDropdown("Yaw", 4, iWidth - 58, 58, add, aay, 5, gCvars.misc_aay);
+		DrawDropdown("Yaw", 4, iWidth - 58, 58, add, aay, 7, gCvars.misc_aay);
 	}
 	DrawButton("Announcer", 4, 8, y += add, gCvars.misc_announcer);
 	DrawButton("Backtrack", 4, 8, y += add, gCvars.misc_backtracking);
