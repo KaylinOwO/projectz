@@ -1,6 +1,7 @@
 #include "Misc.h"
 #include "Util.h"
 #include "Client.h"
+#include "Aimbot.h"
 
 CMisc gMisc;
 
@@ -21,24 +22,6 @@ float AngleNormalize(float angle)
 	return angle;
 }
 
-
-bool BulletTime(CBaseEntity* pLocal)
-{
-	if (!pLocal) return false;
-
-	auto tick_base = pLocal->iTickBase();
-	if (!tick_base) return false;
-
-	auto local_weapon = pLocal->GetActiveWeapon();
-	if (local_weapon == nullptr) return false;
-
-	auto next_attack = local_weapon->get_next_attack();
-	auto can_tick_base = next_attack <= TICKS_TO_TIME(tick_base);
-
-	return can_tick_base;
-}
-
-
 void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand, bool bSendPacket)
 {
 	if (gCvars.misc_serverlag && Util->IsKeyPressed2(gCvars.misc_serverlag_key))
@@ -47,9 +30,6 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand, bool bSendPacket)
 
 	if (!pLocal || pLocal->IsAlive() == false)
 		return;
-
-	if (gCvars.aimbot_mode == 2)
-		BulletTime(pLocal);
 
 	if (!(pLocal->GetFlags() & FL_ONGROUND) && pCommand->buttons & IN_JUMP)
 	{

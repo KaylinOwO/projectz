@@ -70,7 +70,7 @@ bool bMenuOpen = false;
 const char* key[8] = { "Mouse 1", "Mouse 2", "Mouse 3", "Mouse 4", "Mouse 5", "Shift", "Alt", "F" };
 const char* key2[6] = { "Mouse 3", "Mouse 4", "Mouse 5", "Shift", "Alt", "F" };
 const char* aax[4] = { "FUp", "Up", "FDown", "Down" };
-const char* aay[5] = { "FSideR", "FSideL", "FRight", "FLeft", "FManual" };
+const char* aay[7] = { "FSideR", "FSideL", "FRight", "HBL", "HBR", "FLeft", "FManual" };
 const char* hands[3] = { "None", "Transparent", "Chams" };
 const char* weapons[2] = { "None", "Transparent" };
 const char* health[3] = { "Text", "Bar", "Both" };
@@ -378,7 +378,7 @@ void CMenu::DrawBackground()
 
 void CMenu::DrawClose()
 {
-	DrawRectM(iWidth - 24, 0, 24, 24, Color(255, 0, 0, 255));
+	DrawRectM(iWidth - 24, 0, 24, 24, Color(93, 0, 114, 255));
 	DrawStringM(iWidth - 12, 12, Color(255, 255, 255, 255), "X");
 
 	if (Clicked(iWidth - 24, 0, 24, 24))

@@ -99,21 +99,6 @@ void FixMove(CUserCmd* pCmd, Vector m_vOldAngles, float m_fOldForward, float m_f
 	pCmd->sidemove = sin(DEG2RAD(deltaView)) * m_fOldForward + sin(DEG2RAD(deltaView + 90.f)) * m_fOldSidemove;
 }
 
-bool BulletTime(CBaseEntity* pLocal)
-{
-if (!pLocal) return false;
-
-auto tick_base = pLocal->iTickBase();
-if (!tick_base) return false;
-
-auto local_weapon = pLocal->GetActiveWeapon();
-if (local_weapon == nullptr) return false;
-
-auto next_attack = local_weapon->get_next_attack();
-auto can_tick_base = next_attack <= TICKS_TO_TIME(tick_base);
-
-return can_tick_base;
-}
 
 bool IsVisiblePoint(CBaseEntity* pLocal, Vector Point)
 {
@@ -135,9 +120,6 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 		return;
 
 	gCvars.iAimbotIndex = -1;
-
-	if (gCvars.aimbot_mode == 2)
-	BulletTime(pLocal);
 
 	if (!gCvars.aimbot_active)
 		return;

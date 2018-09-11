@@ -66,7 +66,7 @@ public:
 
 	static Color White() { return Color(255, 255, 255, 255); }
 	static Color Black() { return Color(0, 0, 0, 255); }
-	static Color Red() { return Color(255, 0, 0, 255); }
+	static Color Red() { return Color(93, 0, 114, 255); }
 	static Color Orange() { return Color(255, 165, 0, 255); }
 	static Color Yellow() { return Color(255, 255, 0, 255); }
 	static Color Green() { return Color(0, 255, 0, 255); }

@@ -51,7 +51,7 @@
     <TargetName>z</TargetName>
     <IncludePath>C:\ProjectZ\Source\Multisource\steam;$(IncludePath)</IncludePath>
     <LibraryPath>$(LibraryPath)</LibraryPath>
-    <OutDir>..\..\..\..\..\..\Release\projectz</OutDir>
+    <OutDir>C:\Output</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
