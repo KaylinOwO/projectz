@@ -43,9 +43,6 @@ void CTriggerbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	if (trace.hitgroup < 1)
 		return;
 
-	if (!gCvars.triggerbot_deathmatch && trace.m_pEnt->GetTeamNum() == pLocal->GetTeamNum())
-		return;
-
 	if (GAME_TF2)
 	{
 		if (gCvars.triggerbot_ignorecloaked && trace.m_pEnt->GetCond() & TFCond_Cloaked)

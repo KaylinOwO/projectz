@@ -104,14 +104,6 @@ void __fastcall Hooked_PaintTraverse( PVOID pPanels, int edx, unsigned int vguiP
 				}
 			}
 
-			if (!gInts.Engine->IsInGame() || !gInts.Engine->IsConnected())
-			{
-				if (!gCvars.iMenu_Color_Scheme)
-					gDrawManager.DrawString(5, 5, Color::Blue(), "ProjectZ || Username: %s", username);
-				else if (gCvars.iMenu_Color_Scheme == 1)
-					gDrawManager.DrawString(5, 5, Color::Violet(), "ProjectZ || Username: %s", username);
-			}
-
 			if (GetAsyncKeyState(VK_INSERT) & 0x1)
 			{
 				bMenuOpen = !bMenuOpen;

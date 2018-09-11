@@ -38,16 +38,6 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand, bool bSendPacket)
 	float m_fOldForwardMove = pCommand->forwardmove;
 
 	CBaseCombatWeapon *pWeapon = pLocal->GetActiveWeapon();
-	/*if (GAME_CSS && pWeapon)
-	{
-		if (!pWeapon->IsMiscCSSWeapon())
-		{
-			pWeapon->UpdateAccuracyPenalty();
-
-			pCommand->viewangles -= pLocal->GetPunchAngle() * 2;
-		}
-	}*/ //GetPunchAngles returns nullptr
-
 	if (gCvars.misc_angles)
 	{
 		if (pCommand->buttons & IN_ATTACK)
@@ -57,10 +47,13 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand, bool bSendPacket)
 		{
 			if (gCvars.misc_aax == 1)//Fake Up
 				pCommand->viewangles.x = -271.0;
+
 			if (gCvars.misc_aax == 2)//Up
 				pCommand->viewangles.x = -89.0f;
+
 			if (gCvars.misc_aax == 3)//Fake Down
 				pCommand->viewangles.x = 271.0;
+
 			if (gCvars.misc_aax == 4)//Down
 				pCommand->viewangles.x = 89.0f;
 		}
@@ -69,17 +62,17 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand, bool bSendPacket)
 		{
 			if (gCvars.misc_aay == 1)
 			{
-				if (bSendPacket) 
+				if (bSendPacket)
 					pCommand->viewangles.y += 90.0f;
-				else 
+				else
 					pCommand->viewangles.y += -90.0f;
 			}
 
 			if (gCvars.misc_aay == 2)
 			{
-				if (bSendPacket) 
+				if (bSendPacket)
 					pCommand->viewangles.y += -90.0f;
-				else 
+				else
 					pCommand->viewangles.y += 90.0f;
 			}
 
@@ -89,7 +82,23 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand, bool bSendPacket)
 				else pCommand->viewangles.y += 0.0f;
 			}
 
-			if (gCvars.misc_aay == 4)
+			if (gCvars.misc_aay == 4)//Half back left
+			{
+				if (bSendPacket)
+					pCommand->viewangles.y += 135.0f;
+				else
+					pCommand->viewangles.y += -135.0f;
+			}
+
+			if (gCvars.misc_aay == 5)//Half left right
+			{
+				if (bSendPacket)
+					pCommand->viewangles.y += -135.0f;
+				else
+					pCommand->viewangles.y += 135.0f;
+			}
+
+			if (gCvars.misc_aay == 6)
 			{
 				if (bSendPacket) 
 					pCommand->viewangles.y += 90.0f;
@@ -97,7 +106,7 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand, bool bSendPacket)
 					pCommand->viewangles.y += 0.0f;
 			}
 
-			if (gCvars.misc_aay == 5)
+			if (gCvars.misc_aay == 7)
 			{
 				{
 					static bool right = false, left = false;
@@ -127,7 +136,7 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand, bool bSendPacket)
 	if (gCvars.misc_viewmodelfovoverride)
 		viewmodel_fov->SetValue(gCvars.misc_viewmodelfov_value);
 
-	if (gCvars.misc_speedhack && (pCommand->buttons & IN_DUCK))
+	if (gCvars.misc_fastcrouch && (pCommand->buttons & IN_DUCK))
 	{
 		if (pCommand->buttons & IN_ATTACK)
 			return;

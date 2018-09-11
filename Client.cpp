@@ -4,7 +4,6 @@
 #include "Aimbot.h"
 #include "Triggerbot.h"
 #include "Misc.h"
-#include "TimeShift.h"
 #include "Backtrack.h"
 #include "Glow.h"
 #include "NPCAimbot.h"
@@ -50,12 +49,10 @@ bool __fastcall Hooked_CreateMove(PVOID ClientMode, int edx, float input_sample_
 		gMisc.Run(pLocal, pCommand, bSendPacket); //Misc Features
 		gAim.Run(pLocal, pCommand); //Aimbot
 		gTrigger.Run(pLocal, pCommand); //Triggerbot
-		gShift.Run(pLocal, pCommand); //Time Shift
 		gBacktracking.Run(pCommand); //Backtrack (can cause crashes)
 		if (GAME_TF2)
 			gBlast.Run(pLocal, pCommand);
 		CAnnouncer::Get().Run();
-
 		//NPCAimbot, This is a slightly modified version of gir489's Black Mesa Darkstorm 
 		if (GAME_HL2 || GAME_HL2_LC || GAME_HL2_EP1 || GAME_HL2_EP2 || GAME_HLS || GAME_SYN)
 		{
@@ -77,6 +74,7 @@ bool __fastcall Hooked_CreateMove(PVOID ClientMode, int edx, float input_sample_
 				}
 			}
 		}
+
 	}
 	catch(...)
 	{
@@ -105,10 +103,6 @@ void __stdcall Hooked_DrawModelExecute(void *state, ModelRenderInfo_t &pInfo, ma
 	if (GAME_TF2)
 		if (gCvars.misc_nohats && strstr(pszModelName, "player/items"))
 			return;
-
-	//if (GAME_TF2)
-		//if (gCvars.esp_dontdrawteammates && pModelEntity->GetTeamNum() == pLocal->GetTeamNum() && strstr(pszModelName, "models/player"))
-		//	return;
 
 	hook.Unhook();
 

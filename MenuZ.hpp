@@ -9,6 +9,26 @@
 	"Cleaned up" by Kaylin
 */
 
+///.-------------------------------------------------------------------------------------.
+// |           Hexadecimal escape characters and their uses - Mally#0001                 |
+///|-------------------------------------------------------------------------------------|
+///|                                                                                     |
+// |       Escape sequence        ASCII HEX value         Character represented          |
+///|		\a and \007	           07	                   Alert (beep)                  |
+///|		\b	                   08	                   Backspace                     |
+///|		\f	                   0C	                   Formfeed                      |
+///|		\n	                   0A	                   Newline                       |
+///|		\r	                   0D	                   Carriage return               |
+///|		\t	                   09	                   Horizontal tab                |
+///|		\v	                   0B	                   Vertical tab                  |
+///|		\\	                   5C	                   Backslash                     |
+///|		\'	                   27	                   Single quotation mark         |
+///|		\"	                   22	                   Double quotation mark         |
+///|		\?	                   3F	                   Question mark                 |
+///|		\e	                   1B	                   Escape character              |
+///|                                                                                     |
+///'-------------------------------------------------------------------------------------'
+
 class CMenu
 {
 public:
@@ -173,9 +193,9 @@ void CMenu::DrawButton(const char* strText, int iTabIndex, int iX, int iY, bool 
 	if (iTab == iTabIndex)
 	{
 		if (!bVar)
-			DrawOutlinedRectM(iX, iY, 20, 20, Color(220, 24, 24, 255));
+			DrawOutlinedRectM(iX, iY, 20, 20, Color(93, 0, 114, 255));
 		else
-			DrawRectM(iX, iY, 20, 20, Color(220, 24, 24, 255));
+			DrawRectM(iX, iY, 20, 20, Color(93, 0, 114, 255));
 
 		DrawStringM2(iX + 28, iY + 10, Color(255, 255, 255, 255), strText);
 
@@ -190,12 +210,12 @@ void CMenu::SaveButton(const char* strText, int iTabIndex, int iX, int iY)
 {
 	if (iTab == iTabIndex)
 	{
-		DrawOutlinedRectM(iX, iY, 125, 20, Color(220, 24, 24, 255));
+		DrawOutlinedRectM(iX, iY, 125, 20, Color(93, 0, 114, 255));
 
 		DrawStringM2(iX + 12, iY + 10, Color(255, 255, 255, 255), strText);
 
 		if (Hovering(iX, iY, 125, 20))
-			DrawRectM(iX, iY, 125, 20, Color(220, 24, 24, 125));
+			DrawRectM(iX, iY, 125, 20, Color(93, 0, 114, 125));
 
 		if (Clicked(iX, iY, 125, 20))
 			gCvars.Save();
@@ -206,12 +226,12 @@ void CMenu::LoadButton(const char* strText, int iTabIndex, int iX, int iY)
 {
 	if (iTab == iTabIndex)
 	{
-		DrawOutlinedRectM(iX, iY, 125, 20, Color(220, 24, 24, 255));
+		DrawOutlinedRectM(iX, iY, 125, 20, Color(93, 0, 114, 255));
 
 		DrawStringM2(iX + 12, iY + 10, Color(255, 255, 255, 255), strText);
 
 		if (Hovering(iX, iY, 125, 20))
-			DrawRectM(iX, iY, 125, 20, Color(220, 24, 24, 125));
+			DrawRectM(iX, iY, 125, 20, Color(93, 0, 114, 125));
 
 		if (Clicked(iX, iY, 125, 20))
 			gCvars.Load();
@@ -222,12 +242,12 @@ void CMenu::ResetColors(const char* strText, int iTabIndex, int iX, int iY)
 {
 	if (iTab == iTabIndex)
 	{
-		DrawOutlinedRectM(iX, iY, 125, 20, Color(220, 24, 24, 255));
+		DrawOutlinedRectM(iX, iY, 125, 20, Color(93, 0, 114, 255));
 
 		DrawStringM2(iX + 12, iY + 10, Color(255, 255, 255, 255), strText);
 
 		if (Hovering(iX, iY, 125, 20))
-			DrawRectM(iX, iY, 125, 20, Color(220, 24, 24, 125));
+			DrawRectM(iX, iY, 125, 20, Color(93, 0, 114, 125));
 
 		if (Clicked(iX, iY, 125, 20))
 		{
@@ -262,7 +282,7 @@ void CMenu::DrawKey(int tabindex, int iX, int iY, int kek)
 		auto bHover = Hovering(iX, iY, 60, 20);
 		static auto bState = false;
 
-		DrawOutlinedRectM(iX, iY, 60, 20, Color(220, 24, 24, 255));
+		DrawOutlinedRectM(iX, iY, 60, 20, Color(93, 0, 114, 255));
 		DrawRectM(iX + 1, iY + 1, 60 - 2, 20 - 2, Color(27, 27, 27));
 
 		if (bHover && Clicked(iX, iY, 60, 20))
@@ -288,8 +308,8 @@ void CMenu::DrawSlider(const char* strText, int iTabIndex, int iX, int iY, int i
 {
 	if (iTab == iTabIndex)
 	{
-		DrawOutlinedRectM(iX, iY, iWidth, 20, Color(220, 24, 24, 255));
-		DrawRectM(iX, iY, iVar * ((float)iWidth / (float)(iMax)), 20, Color(220, 24, 24, 255));
+		DrawOutlinedRectM(iX, iY, iWidth, 20, Color(93, 0, 114, 255));
+		DrawRectM(iX, iY, iVar * ((float)iWidth / (float)(iMax)), 20, Color(93, 0, 114, 255));
 
 		std::string s = std::to_string(iVar);
 		char const *pchar = s.c_str();
@@ -309,9 +329,9 @@ void CMenu::DrawDropdown(const char* strText, int iTabIndex, int iX, int iY, int
 	if (iTab == iTabIndex)
 	{
 
-		DrawOutlinedRectM(iX - 50, iY, 100, iAdd, Color(220, 24, 24, 255));
+		DrawOutlinedRectM(iX - 50, iY, 100, iAdd, Color(93, 0, 114, 255));
 
-		DrawOutlinedRectM(iX - 50, iY, 100, iAdd + (iAmount * iAdd) + 1, Color(220, 24, 24, 255));
+		DrawOutlinedRectM(iX - 50, iY, 100, iAdd + (iAmount * iAdd) + 1, Color(93, 0, 114, 255));
 
 		DrawStringM(iX, iY + 10, Color(255, 255, 255, 255), strText);
 
@@ -321,14 +341,14 @@ void CMenu::DrawDropdown(const char* strText, int iTabIndex, int iX, int iY, int
 			const char* strMeme = chTable[iVarIndex - 1];
 
 			if (Hovering(iX - 50, iY + iVarIndex * iAdd, 100, iAdd))
-				DrawRectM(iX - 49, iY + iVarIndex * iAdd, 98, iAdd, iVar == iVarIndex ? Color(220, 24, 24, 125) : Color(255, 255, 255, 125));
+				DrawRectM(iX - 49, iY + iVarIndex * iAdd, 98, iAdd, iVar == iVarIndex ? Color(93, 0, 114, 125) : Color(255, 255, 255, 125));
 
 			if (Holding(iX - 50, iY + iVarIndex * iAdd, 100, iAdd))
 			{
 				iVar = iVarIndex;
 			}
 
-			DrawStringM(iX, iY + (iAdd / 2) + (iVarIndex * iAdd), iVar == iVarIndex ? Color(220, 24, 24, 255) : Color(255, 255, 255, 255), strMeme);
+			DrawStringM(iX, iY + (iAdd / 2) + (iVarIndex * iAdd), iVar == iVarIndex ? Color(93, 0, 114, 255) : Color(255, 255, 255, 255), strMeme);
 		}
 	}
 }
@@ -338,7 +358,7 @@ void CMenu::DrawTab(const char* strText, int iTabIndex)
 	int iBaseX = (iWidth / 4) * (iTabIndex - 1);
 	int iBaseW = iWidth / 4;
 
-	DrawRectM(iBaseX, 24, iBaseW, 28, iTab == iTabIndex ? Color(200, 5, 5, 255) : Color(220, 24, 24, 255));
+	DrawRectM(iBaseX, 24, iBaseW, 28, iTab == iTabIndex ? Color(200, 5, 5, 255) : Color(93, 0, 114, 255));
 	DrawStringM(iBaseX + (iBaseW / 2), 38, Color(255, 255, 255, 255), strText);
 
 	if (Hovering(iBaseX, 24, iBaseW, 28))
@@ -350,10 +370,10 @@ void CMenu::DrawTab(const char* strText, int iTabIndex)
 
 void CMenu::DrawBackground()
 {
-	DrawRectM(0, 0, iWidth, iHeight, Color(0, 0, 0, 200));
-	DrawRectM(0, 0, iWidth, 24, Color(220, 24, 24, 255));
+	DrawRectM(0, 0, iWidth, iHeight, Color(0, 0, 0, 125));
+	DrawRectM(0, 0, iWidth, 24, Color(93, 0, 114, 255));
 	DrawStringM(iWidth / 2, 12, Color(255, 255, 255, 255), "ProjectZ || Cheat Menu");
-	DrawOutlinedRectM(0, 0, iWidth, iHeight, Color(220, 24, 24, 255));
+	DrawOutlinedRectM(0, 0, iWidth, iHeight, Color(93, 0, 114, 255));
 }
 
 void CMenu::DrawClose()
@@ -367,11 +387,6 @@ void CMenu::DrawClose()
 
 void CMenu::DrawButtons()
 {
-	/*
-	Just gonna write down some things to remember/for other developers to note
-	Each function has a number for what tab you're on so for "Enabeled", 3 that will be the 2nd tab
-	Each dropdown has to have the amount of selections (the last numerical value in the DrawDropdown function
-	*/
 
 	DrawClose();
 
@@ -401,8 +416,7 @@ void CMenu::DrawButtons()
 		DrawButton("Zoomed Only", 1, 8, y += add, gCvars.aimbot_zoomedonly);
 	}
 	DrawButton("Autoshoot", 1, 8, y += add, gCvars.aimbot_autoshoot);
-	DrawButton("Aim @ Teammates", 1, 8, y += add, gCvars.aimbot_deathmatch);
-	DrawButton("Aim @ Backtrack", 1, 8, y += add, gCvars.aimbot_aimatbacktrack);
+	DrawButton("Aim at Backtrack", 1, 8, y += add, gCvars.aimbot_aimatbacktrack);
 	if (GAME_TF2)
 	{
 		DrawButton("Ignore Cloaked", 1, 8, y += add, gCvars.aimbot_ignorecloaked);
@@ -419,14 +433,13 @@ void CMenu::DrawButtons()
 	y = 58;
 	DrawButton("Hitscan Triggerbot", 2, 8, y, gCvars.triggerbot_active);
 	DrawButton("Head Only", 2, 12, y += add, gCvars.triggerbot_headonly);
-	DrawButton("Shoot @ Teammmates", 2, 12, y += add, gCvars.triggerbot_deathmatch);
 	DrawButton("Ignore Cloaked", 2, 12, y += add, gCvars.triggerbot_ignorecloaked);
 	DrawDropdown("Key", 2, iWidth - 160, 58, add, key2, 6, gCvars.triggerbot_key);
 	if (GAME_TF2)
 	{
 		DrawButton("Auto Backstab", 2, 8, y += add, gCvars.triggerbot_autobackstab);
 		DrawButton("Auto Airblast", 2, 8, y += add, gCvars.autoairblast_enabled);
-		DrawButton("Aim @ Projectile", 2, 12, y += add, gCvars.autoairblast_rage);
+		DrawButton("Aim at Projectile", 2, 12, y += add, gCvars.autoairblast_rage);
 	}
 
 	//
@@ -438,6 +451,7 @@ void CMenu::DrawButtons()
 	if (GAME_TF2)
 		DrawButton("Enemy Buildings", 3, 8, y += add, gCvars.esp_objects);
 	DrawButton("Box", 3, 8, y += add, gCvars.esp_box);
+	DrawButton("Bones", 3, 8, y += add, gCvars.esp_bones);
 	DrawButton("Name", 3, 8, y += add, gCvars.esp_name);
 	DrawButton("Health", 3, 8, y += add, gCvars.esp_health);
 	if (GAME_TF2)
@@ -448,9 +462,7 @@ void CMenu::DrawButtons()
 		DrawButton("Chams", 3, 8, y += add, gCvars.esp_chams);
 		DrawDropdown("Chams", 3, iWidth - 58, 58, add, chams , 2, gCvars.esp_chams_mode);
 		DrawButton("Hands", 3, 8, y += add, gCvars.misc_hands);
-	//	DrawButton("Weapons", 3, 8, y += add, gCvars.misc_weapons);
 		DrawDropdown("Hands", 3, iWidth - 58, 160, add, hands, 3, gCvars.misc_hands_mode);
-		//DrawDropdown("Weapons", 3, iWidth - 160, 260, add, hands, 2, gCvars.misc_weapons_mode);
 		DrawDropdown("Box", 3, iWidth - 160, 58, add, box, 3, gCvars.esp_box_mode);
 		DrawDropdown("Health", 3, iWidth - 160, 160, add, health, 3, gCvars.esp_health_mode);
 		DrawButton("History Ticks", 3, 8, y += add, gCvars.esp_historyticks);
@@ -462,16 +474,13 @@ void CMenu::DrawButtons()
 		DrawDropdown("Health", 3, iWidth - 160, 58, add, health, 3, gCvars.esp_health_mode);
 	}
 	DrawButton("Debug", 3, 8, y += add, gCvars.esp_debug);
-	//DrawDropdown("Weapons", 3, iWidth - 58, 270, add, weapons, 2, gCvars.misc_weapons_mode);
 	DrawButton("Thirdperson", 3, 8, y += add, gCvars.misc_thirdperson);
 	if (GAME_TF2)
 	{
-	//	DrawButton("No Drawing Teammates", 3, 8, y += add, gCvars.esp_dontdrawteammates);
 		DrawButton("No Hats", 3, 8, y += add, gCvars.misc_nohats);
 		DrawButton("No Scope", 3, 8, y += add, gCvars.misc_noscope);
 	}
 	DrawButton("No Zoom", 3, 8, y += add, gCvars.misc_nozoom);
-	//DrawButton("No Visual Recoil", 3, 8, y += add, gCvars.misc_novisrecoil);
 	DrawButton("FOV Override", 3, 8, y += add, gCvars.misc_fovoverride);
 	if (gCvars.misc_fovoverride)
 		DrawSlider("", 3, 12, y += add, 180, 250, gCvars.misc_fov_value);
@@ -501,16 +510,6 @@ void CMenu::DrawButtons()
 	DrawButton("Auto Strafe", 4, 8, y += add, gCvars.misc_autostrafe);
 	if (gInts.Engine->GetAppId() != 440)
 	{
-		DrawButton("Time Shift", 4, 8, y += add, gCvars.timeshift_enabled);
-		if (gCvars.timeshift_enabled)
-			DrawSlider("", 4, 12, y += add, 180, 1000, gCvars.timeshift_value);
-		DrawDropdown("TS Key", 4, iWidth - 160, 58, add, key2, 6, gCvars.timeshift_key);
-
-		DrawButton("Server Lagger", 4, 8, y += add, gCvars.misc_serverlag);
-		if (gCvars.misc_serverlag)
-			DrawSlider("", 4, 12, y += add, 180, 500, gCvars.misc_serverlag_value);
-		DrawDropdown("SL Key", 4, iWidth - 58, 58, add, key2, 6, gCvars.misc_serverlag_key);
-
 		DrawButton("Anti-Aim", 4, 8, y += add, gCvars.misc_angles);
 
 		DrawDropdown("Pitch", 4, iWidth - 160, 270, add, aax, 4, gCvars.misc_aax);
@@ -525,11 +524,9 @@ void CMenu::DrawButtons()
 		DrawDropdown("Pitch", 4, iWidth - 160, 58, add, aax, 4, gCvars.misc_aax);
 		DrawDropdown("Yaw", 4, iWidth - 58, 58, add, aay, 5, gCvars.misc_aay);
 	}
-	DrawButton("MG Crits XD", 4, 8, y += add, gCvars.misc_epiccrithacklol);
 	DrawButton("Announcer", 4, 8, y += add, gCvars.misc_announcer);
 	DrawButton("Backtrack", 4, 8, y += add, gCvars.misc_backtracking);
-	if (gCvars.misc_backtracking)
-		DrawButton("Backtrack Teammates", 4, 12, y += add, gCvars.misc_backtracking_deathmatch);
+	DrawButton("Fastcrouch", 4, 8, y += add, gCvars.misc_fastcrouch);
 	DrawButton("Fakelag", 4, 8, y += add, gCvars.misc_fakelag);
 	if (gCvars.misc_fakelag)
 		DrawSlider("", 4, 12, y += add, 180, 15, gCvars.misc_fakelag_value);

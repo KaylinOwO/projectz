@@ -98,7 +98,7 @@ void FixMove(CUserCmd* pCmd, Vector m_vOldAngles, float m_fOldForward, float m_f
 	pCmd->sidemove = sin(DEG2RAD(deltaView)) * m_fOldForward + sin(DEG2RAD(deltaView + 90.f)) * m_fOldSidemove;
 }
 
-/*bool BulletTime(CBaseEntity* pLocal)
+bool BulletTime(CBaseEntity* pLocal)
 {
 if (!pLocal) return false;
 
@@ -112,7 +112,7 @@ auto next_attack = local_weapon->get_next_attack();
 auto can_tick_base = next_attack <= TICKS_TO_TIME(tick_base);
 
 return can_tick_base;
-}*/
+}
 
 bool IsVisiblePoint(CBaseEntity* pLocal, Vector Point)
 {
@@ -550,14 +550,7 @@ int CAimbot::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 		{
 			auto isMedic = (pLocal->GetClassNum() == TF2_Medic && pWeap->GetSlot() == 1);
 
-			if (pEntity->GetLifeState() != LIFE_ALIVE || !isMedic && !gCvars.aimbot_deathmatch && pEntity->GetTeamNum() == pLocal->GetTeamNum())
-				continue;
-			else if (pEntity->GetLifeState() != LIFE_ALIVE || isMedic && pEntity->GetTeamNum() != pLocal->GetTeamNum())
-				continue;
-		}
-		else
-		{
-			if (pEntity->GetLifeState() != LIFE_ALIVE || !gCvars.aimbot_deathmatch && pEntity->GetTeamNum() == pLocal->GetTeamNum())
+				 if (pEntity->GetLifeState() != LIFE_ALIVE || isMedic && pEntity->GetTeamNum() != pLocal->GetTeamNum())
 				continue;
 		}
 

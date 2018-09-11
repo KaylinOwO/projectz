@@ -1,6 +1,7 @@
 #include "ESP.h"
 #include "CDrawManager.h"
 #include "Backtrack.h"
+#include "Client.h"
 
 CESP gESP;
 
@@ -142,7 +143,7 @@ void CESP::Run(CBaseEntity* pLocal)
 			continue;
 
 		const char* chName = pBaseEntity->GetClientClass()->chName;
-		
+
 		if (gCvars.esp_active && gCvars.esp_name)
 		{
 
@@ -153,142 +154,142 @@ void CESP::Run(CBaseEntity* pLocal)
 				{
 					const char* chModelName = gInts.ModelInfo->GetModelName(pBaseEntity->GetModel());
 
-						if (strstr(chModelName, "citizen"))
-						{
-							vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(2);
-							if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
-								continue;
-							gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Citizen");
+					if (strstr(chModelName, "citizen"))
+					{
+						vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(2);
+						if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
 							continue;
-						}
+						gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Citizen");
+						continue;
+					}
 
-						if (strstr(chModelName, "police"))
-						{
-							vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(2);
-							if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
-								continue;
-							gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Police");
+					if (strstr(chModelName, "police"))
+					{
+						vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(2);
+						if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
 							continue;
-						}
+						gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Police");
+						continue;
+					}
 
-						if (strstr(chModelName, "combine_soldier"))
-						{
-							vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(2);
-							if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
-								continue;
-							gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Soldier");
+					if (strstr(chModelName, "combine_soldier"))
+					{
+						vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(2);
+						if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
 							continue;
-						}
+						gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Soldier");
+						continue;
+					}
 
-						if (strstr(chModelName, "combine_soldier_prisonguard"))
-						{
-							vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(2);
-							if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
-								continue;
-							gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Prison Guard");
+					if (strstr(chModelName, "combine_soldier_prisonguard"))
+					{
+						vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(2);
+						if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
 							continue;
-						}
+						gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Prison Guard");
+						continue;
+					}
 
-						if (strstr(chModelName, "combine_super_soldier"))
-						{
-							vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(2);
-							if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
-								continue;
-							gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Super Soldier");
+					if (strstr(chModelName, "combine_super_soldier"))
+					{
+						vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(2);
+						if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
 							continue;
-						}
-					
-						if (strstr(chModelName, "sentry"))
-						{
-							vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(1);
-							if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
-								continue;
-							gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Sentry");
-							continue;
-						}
+						gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Super Soldier");
+						continue;
+					}
 
-						if (strstr(chModelName, "bullsquid"))
-						{
-							vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(2);
-							if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
-								continue;
-							gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Bullsquid");
+					if (strstr(chModelName, "sentry"))
+					{
+						vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(1);
+						if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
 							continue;
-						}
+						gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Sentry");
+						continue;
+					}
 
-						if (strstr(chModelName, "controller"))
-						{
-							vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(0);
-							if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
-								continue;
-							gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Controller");
+					if (strstr(chModelName, "bullsquid"))
+					{
+						vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(2);
+						if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
 							continue;
-						}
+						gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Bullsquid");
+						continue;
+					}
 
-						if (strstr(chModelName, "garg"))
-						{
-							vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(2);
-							if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
-								continue;
-							gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Garg");
+					if (strstr(chModelName, "controller"))
+					{
+						vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(0);
+						if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
 							continue;
-						}
+						gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Controller");
+						continue;
+					}
 
-						if (strstr(chModelName, "houndeye"))
-						{
-							vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(1);
-							if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
-								continue;
-							gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Houndeye");
+					if (strstr(chModelName, "garg"))
+					{
+						vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(2);
+						if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
 							continue;
-						}
+						gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Garg");
+						continue;
+					}
 
-						if (strstr(chModelName, "agrunt"))
-						{
-							vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(3);
-							if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
-								continue;
-							gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "AGrunt");
+					if (strstr(chModelName, "houndeye"))
+					{
+						vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(1);
+						if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
 							continue;
-						}
+						gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Houndeye");
+						continue;
+					}
 
-						if (strstr(chModelName, "ichthyosaur"))
-						{
-							vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(1);
-							if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
-								continue;
-							gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Ichthyosaur");
+					if (strstr(chModelName, "agrunt"))
+					{
+						vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(3);
+						if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
 							continue;
-						}
+						gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "AGrunt");
+						continue;
+					}
 
-						if (strstr(chModelName, "snark"))
-						{
-							vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(0);
-							if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
-								continue;
-							gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Snark");
+					if (strstr(chModelName, "ichthyosaur"))
+					{
+						vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(1);
+						if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
 							continue;
-						}
+						gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Ichthyosaur");
+						continue;
+					}
 
-						if (strstr(chModelName, "apache"))
-						{
-							vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(0);
-							if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
-								continue;
-							gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Apache");
+					if (strstr(chModelName, "snark"))
+					{
+						vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(0);
+						if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
 							continue;
-						}
+						gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Snark");
+						continue;
+					}
 
-						if (strstr(chModelName, "abrams") || strstr(chModelName, "lav.mdl"))
-						{
-							vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(0);
-							if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
-								continue;
-							gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Tank");
+					if (strstr(chModelName, "apache"))
+					{
+						vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(0);
+						if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
 							continue;
-						}
+						gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Apache");
+						continue;
+					}
 
-				
+					if (strstr(chModelName, "abrams") || strstr(chModelName, "lav.mdl"))
+					{
+						vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(0);
+						if (!gDrawManager.WorldToScreen(vWorldPos, vScreen))
+							continue;
+						gDrawManager.DrawString(vScreen.x, vScreen.y, Color::Red(), "Tank");
+						continue;
+					}
+
+
 					if (strstr(chModelName, "headcrab"))
 					{
 						vWorldPos = vWorldPos = pBaseEntity->GetHitboxPosition(0);
@@ -364,7 +365,7 @@ void GetWorldSpaceCenter(CBaseEntity* pBaseEnt, Vector& vWorldSpaceCenter)
 		vWorldSpaceCenter = pBaseEnt->GetAbsOrigin();
 		vWorldSpaceCenter.z += (vMin.z + vMax.z) / 2.0f;
 	}
-} 
+}
 
 void CESP::Player_ESP(CBaseEntity* pLocal, CBaseEntity* pEntity)
 {
@@ -377,6 +378,7 @@ void CESP::Player_ESP(CBaseEntity* pLocal, CBaseEntity* pEntity)
 	Vector vMin = pEntity->GetCollideableMins();
 	Vector vMax = pEntity->GetCollideableMaxs();
 	Color clrPlayerCol = gDrawManager.GetPlayerColor(pEntity);
+	Color clrBoneCol = gCvars.esp_bones == 1 ? Color::White() : gCvars.esp_bones == 2 ? Color::Green() : clrPlayerCol;
 
 	Vector vPointList[] = {
 		Vector(vMin.x, vMin.y, vMin.z),
@@ -405,7 +407,7 @@ void CESP::Player_ESP(CBaseEntity* pLocal, CBaseEntity* pEntity)
 		!gDrawManager.WorldToScreen(vTransformed[4], frt) ||
 		!gDrawManager.WorldToScreen(vTransformed[1], brb) ||
 		!gDrawManager.WorldToScreen(vTransformed[7], flt))
-		return; 
+		return;
 
 	Vector arr[] = { flb, brt, blb, frt, frb, brb, blt, flt };
 
@@ -434,7 +436,7 @@ void CESP::Player_ESP(CBaseEntity* pLocal, CBaseEntity* pEntity)
 	x += ((right - left) / 8);
 	w -= ((right - left) / 8) * 2;
 
-//	Color clrBoneCol = gCvars.esp_bones == 1 ? Color::White() : gCvars.esp_bones == 2 ? Color::Green() : clrPlayerCol;
+	//	Color clrBoneCol = gCvars.esp_bones == 1 ? Color::White() : gCvars.esp_bones == 2 ? Color::Green() : clrPlayerCol;
 	int iY = 0;
 	int iHp = pEntity->GetHealth(), iMaxHp = pEntity->GetMaxHealth();
 	if (iHp > iMaxHp)
@@ -565,5 +567,46 @@ void CESP::Player_ESP(CBaseEntity* pLocal, CBaseEntity* pEntity)
 
 			}
 		}
+	}
+
+	if (gCvars.esp_bones) //bones
+	{
+		static int iLeftArmBones[] = { 8, 7, 6, 4 };
+		static int iRightArmBones[] = { 11, 10, 9, 4 };
+		static int iHeadBones[] = { 0, 4, 1 };
+		static int iLeftLegBones[] = { 14, 13, 1 };
+		static int iRightLegBones[] = { 17, 16, 1 };
+
+		DrawBone(pEntity, iLeftArmBones, 4, clrBoneCol);
+		DrawBone(pEntity, iRightArmBones, 4, clrBoneCol);
+
+		DrawBone(pEntity, iHeadBones, 3, clrBoneCol);
+
+		DrawBone(pEntity, iLeftLegBones, 3, clrBoneCol);
+		DrawBone(pEntity, iRightLegBones, 3, clrBoneCol);
+	}
+
+	Vector b = pLocal->GetAbsAngles();
+}
+
+
+
+//My code, but creds to f1ssion for giving me the idea
+void CESP::DrawBone(CBaseEntity* pEntity, int* iBones, int count, Color clrCol)
+{
+	for (int i = 0; i < count; i++)
+	{
+		if (i == count - 1)
+			continue;
+
+		Vector vBone1 = pEntity->GetHitboxPosition(iBones[i]);
+		Vector vBone2 = pEntity->GetHitboxPosition(iBones[i + 1]);
+
+		Vector vScr1, vScr2;
+
+		if (!gDrawManager.WorldToScreen(vBone1, vScr1) || !gDrawManager.WorldToScreen(vBone2, vScr2))
+			continue;
+
+		gDrawManager.DrawLine(vScr1.x, vScr1.y, vScr2.x, vScr2.y, clrCol);
 	}
 }

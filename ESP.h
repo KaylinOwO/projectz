@@ -1,8 +1,6 @@
 #pragma once
 #include "SDK.h"
 
-
-
 class CESP
 {
 public:
@@ -12,12 +10,11 @@ public:
 private:
 
 	void Player_ESP(CBaseEntity* pLocal, CBaseEntity* pEntity);
-
-	void NPC_ESP(CBaseEntity* pLocal);
-
 	//Other funcs
 
 	void DrawBone(CBaseEntity* pEntity, int* iBones, int count, Color clrCol);
+
+	void DrawFace(CBaseEntity* pEntity, Color clr);
 };
 
-extern CESP gESP; 
+extern CESP gESP;

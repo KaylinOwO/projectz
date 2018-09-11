@@ -189,9 +189,7 @@ DWORD WINAPI dwMainThread( LPVOID lpArguments )
 		gInts.cvar->ConsoleColorPrintf(Color(255, 105, 180, 255), "ProjectZ Injected\n");
 		gInts.cvar->ConsoleColorPrintf(Color(255, 182, 193, 255), "Build Date: ");
 		gInts.cvar->ConsoleColorPrintf(Color(197, 139, 231, 255), "%s\n", __TIMESTAMP__);
-		gInts.cvar->ConsoleColorPrintf(Color(255, 182, 193, 255), "Steam AppId:  ");
-		gInts.cvar->ConsoleColorPrintf(Color(197, 139, 231, 255), "%i\n", gInts.Engine->GetAppId());
-		gInts.cvar->ConsoleColorPrintf(Color(255, 182, 193, 255), "Steam Nickname:  ");
+		gInts.cvar->ConsoleColorPrintf(Color(255, 182, 193, 255), "Current Username:  ");
 		gInts.cvar->ConsoleColorPrintf(Color(197, 139, 231, 255), "%s\n", gInts.steamfriends->GetPersonaName());
 
 		//Setup the Panel hook so we can draw.

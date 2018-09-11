@@ -46,7 +46,6 @@ public:
 	int aimbot_smooth_amt;
 	int aimbot_mode = 1; 
 	bool aimbot_autoshoot;
-	bool aimbot_deathmatch;
 	bool aimbot_waitforcharge;
 	bool aimbot_zoomedonly;
 	bool aimbot_ignorecloaked;
@@ -60,7 +59,6 @@ public:
 	int triggerbot_key = 1;
 	bool triggerbot_headonly;
 	bool triggerbot_ignorecloaked;
-	bool triggerbot_deathmatch;
 	bool autoairblast_enabled;
 	bool autoairblast_rage;
 	bool autoairblast_silent;
@@ -69,13 +67,13 @@ public:
 	bool esp_switch;
 	bool esp_active;
 	int esp_pos;
-	bool esp_speclist;
 	bool esp_enemyonly;
 	bool esp_box;
 	bool esp_objects;
 	int esp_box_mode = 1;
 	bool esp_name;
 	bool esp_class;
+	bool esp_bones;
 	bool esp_health;
 	int esp_health_mode = 1;
 	bool esp_glow;
@@ -89,10 +87,6 @@ public:
 	bool misc_switch;
 	bool misc_bunnyhop;
 	bool misc_autostrafe;
-	bool misc_autorocketjump;
-	int misc_autorocketjump_key = 1;
-	bool misc_speedhack;
-	bool misc_epiccrithacklol;
 	bool misc_angles;
 	int misc_aax;
 	int misc_aay;
@@ -113,7 +107,7 @@ public:
 	bool misc_weapons;
 	int misc_weapons_mode;
 	bool misc_backtracking;
-	bool misc_backtracking_deathmatch;
+	bool misc_fastcrouch;
 	int misc_zangle;
 	bool misc_fovoverride;
 	int misc_fov_value = 75;
@@ -126,12 +120,6 @@ public:
 	int misc_configselection = 1;
 	bool misc_novisrecoil;
 
-	bool timeshift_switch;
-	bool timeshift_enabled;
-	int timeshift_key = 1;
-	int timeshift_value = 800;
-
-	float playerlist_switch;
 	float PlayerMode[64] = {
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,

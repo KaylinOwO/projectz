@@ -33,8 +33,7 @@ void CGlobalVariables::Save(void)
 		}
 		gFileManager.WriteFloat("Aimbot", "Resolver", aimbot_resolver);
 		gFileManager.WriteFloat("Aimbot", "Autoshoot", aimbot_autoshoot);
-		gFileManager.WriteFloat("Aimbot", "Aim @ Teammates", aimbot_deathmatch);
-		gFileManager.WriteFloat("Aimbot", "Aim @ Backtrack", aimbot_aimatbacktrack);
+		gFileManager.WriteFloat("Aimbot", "Aim at Backtrack", aimbot_aimatbacktrack);
 		gFileManager.WriteFloat("Aimbot", "Ignore Health > 100", aimbot_ignoreabove100);
 		gFileManager.WriteFloat("Aimbot", "Ignore Cloaked", aimbot_ignorecloaked);
 	}
@@ -95,12 +94,6 @@ void CGlobalVariables::Save(void)
 	}
 
 	//
-	// Save Time Shift
-	//
-    gFileManager.WriteFloat("Time Shift", "Enabled", timeshift_enabled);
-	gFileManager.WriteFloat("Time Shift", "Value", timeshift_value);
-
-	//
 	// Save Misc
 	//
 	gFileManager.WriteFloat("Misc", "Bunnyhop", misc_bunnyhop);
@@ -110,7 +103,7 @@ void CGlobalVariables::Save(void)
 		gFileManager.WriteFloat("Misc", "Hands", gCvars.misc_hands);
 		gFileManager.WriteFloat("Misc", "Hands Mode", gCvars.misc_hands_mode);
 		gFileManager.WriteFloat("Misc", "No Hats", gCvars.misc_nohats);
-		gFileManager.WriteFloat("Misc", "Crouch Exploit", gCvars.misc_speedhack);
+		gFileManager.WriteFloat("Misc", "Crouch Exploit", gCvars.misc_fastcrouch);
 		gFileManager.WriteFloat("Misc", "No Scope", gCvars.misc_noscope);
 		gFileManager.WriteFloat("Misc", "Disable Crosshair", gCvars.misc_noscope_disablecrosshair);
 	}
@@ -132,7 +125,6 @@ void CGlobalVariables::Save(void)
 		gFileManager.WriteFloat("Misc", "Pitch Angles", misc_aax);
 		gFileManager.WriteFloat("Misc", "Yaw Angles", misc_aay);
 		gFileManager.WriteFloat("Misc", "Backtracking", misc_backtracking);
-		gFileManager.WriteFloat("Misc", "Backtrack Teammates", misc_backtracking_deathmatch);
 	}
 
 	gFileManager.WriteFloat("Settings", "Position X", iMenu_Pos_X);
@@ -145,7 +137,6 @@ void CGlobalVariables::Save(void)
 	//
 	gFileManager.WriteFloat("Hotkeys", "Aimbot", aimbot_key);
 	gFileManager.WriteFloat("Hotkeys", "Triggerbot", triggerbot_key);
-	gFileManager.WriteFloat("Hotkeys", "Time Shift", timeshift_key);
 	gFileManager.WriteFloat("Hotkeys", "Server Lagger", misc_serverlag_key);
 }
 //===================================================================================
@@ -175,11 +166,9 @@ void CGlobalVariables::Load(void)
 			aimbot_zoomedonly = gFileManager.ReadFloat("Aimbot", "Zoomed Only", aimbot_zoomedonly);
 			aimbot_waitforcharge = gFileManager.ReadFloat("Aimbot", "Wait For Charge", aimbot_waitforcharge);
 		}
-		aimbot_deathmatch = gFileManager.ReadFloat("Aimbot", "Deathmatch", aimbot_deathmatch);
 		aimbot_resolver = gFileManager.ReadFloat("Aimbot", "Resolver", aimbot_resolver);
 		aimbot_autoshoot = gFileManager.ReadFloat("Aimbot", "Autoshoot", aimbot_autoshoot);
-		aimbot_deathmatch = gFileManager.ReadFloat("Aimbot", "Aim @ Backtrack", aimbot_deathmatch);
-		aimbot_aimatbacktrack = gFileManager.ReadFloat("Aimbot", "Aim @ Backtrack", aimbot_aimatbacktrack);
+		aimbot_aimatbacktrack = gFileManager.ReadFloat("Aimbot", "Aim at Backtrack", aimbot_aimatbacktrack);
 		aimbot_ignorecloaked = gFileManager.ReadFloat("Aimbot", "Ignore Cloaked", aimbot_ignorecloaked);
 	}
 
@@ -238,13 +227,6 @@ void CGlobalVariables::Load(void)
 		color_b_other = gFileManager.ReadFloat("ESP", "TO Green", color_b_other);
 	}
 
-
-	//
-	// Load Time Shift
-	//
-	timeshift_enabled = gFileManager.ReadFloat("Time Shift", "Enabled", timeshift_enabled);
-	timeshift_value = gFileManager.ReadFloat("Time Shift", "Value", timeshift_value);
-
 	//
 	// Load Misc
 	//
@@ -255,7 +237,7 @@ void CGlobalVariables::Load(void)
 		misc_hands = gFileManager.ReadFloat("Misc", "Hands", gCvars.misc_hands);
 		misc_hands_mode = gFileManager.ReadFloat("Misc", "Hands Mode", gCvars.misc_hands_mode);
 		misc_nohats = gFileManager.ReadFloat("Misc", "No Hats", gCvars.misc_nohats);
-		misc_speedhack = gFileManager.ReadFloat("Misc", "Crouch Exploit", gCvars.misc_speedhack);
+		misc_fastcrouch = gFileManager.ReadFloat("Misc", "Crouch Exploit", gCvars.misc_fastcrouch);
 		misc_noscope = gFileManager.ReadFloat("Misc", "No Scope", gCvars.misc_noscope);
 		misc_noscope_disablecrosshair = gFileManager.ReadFloat("Misc", "Disable Crosshair", gCvars.misc_noscope_disablecrosshair);
 	}
@@ -277,7 +259,6 @@ void CGlobalVariables::Load(void)
 		misc_aax = gFileManager.ReadFloat("Misc", "Pitch Angles", misc_aax);
 		misc_aay = gFileManager.ReadFloat("Misc", "Yaw Angles", misc_aay);
 		misc_backtracking = gFileManager.ReadFloat("Misc", "Backtracking", misc_backtracking);
-		misc_backtracking_deathmatch = gFileManager.ReadFloat("Misc", "Backtrack Teammates", misc_backtracking_deathmatch);
 	}
 
 	iMenu_Pos_X = gFileManager.ReadFloat("Settings", "Position X", iMenu_Pos_X);
@@ -290,6 +271,5 @@ void CGlobalVariables::Load(void)
 	//
 	aimbot_key = gFileManager.ReadFloat("Hotkeys", "Aimbot", aimbot_key);
 	triggerbot_key = gFileManager.ReadFloat("Hotkeys", "Triggerbot", triggerbot_key);
-	timeshift_key = gFileManager.ReadFloat("Hotkeys", "Time Shift", timeshift_key);
 	misc_serverlag_key = gFileManager.ReadFloat("Hotkeys", "Server Lagger", misc_serverlag_key);
 }
