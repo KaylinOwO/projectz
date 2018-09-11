@@ -4,6 +4,15 @@
 
 CMisc gMisc;
 
+#define TICK_INTERVAL			(gInts.globals->interval_per_tick)
+
+
+#define TIME_TO_TICKS( dt )		( (int)( 0.5f + (float)(dt) / TICK_INTERVAL ) )
+#define TICKS_TO_TIME( t )		( TICK_INTERVAL *( t ) )
+
+#define tick_interval gInts.globals->interval_per_tick
+#define tick_intervalsqr tick_interval * tick_interval
+
 float AngleNormalize(float angle)
 {
 	while (angle < -180)    angle += 360;
@@ -11,6 +20,24 @@ float AngleNormalize(float angle)
 
 	return angle;
 }
+
+
+bool BulletTime(CBaseEntity* pLocal)
+{
+	if (!pLocal) return false;
+
+	auto tick_base = pLocal->iTickBase();
+	if (!tick_base) return false;
+
+	auto local_weapon = pLocal->GetActiveWeapon();
+	if (local_weapon == nullptr) return false;
+
+	auto next_attack = local_weapon->get_next_attack();
+	auto can_tick_base = next_attack <= TICKS_TO_TIME(tick_base);
+
+	return can_tick_base;
+}
+
 
 void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand, bool bSendPacket)
 {
@@ -20,6 +47,9 @@ void CMisc::Run(CBaseEntity* pLocal, CUserCmd* pCommand, bool bSendPacket)
 
 	if (!pLocal || pLocal->IsAlive() == false)
 		return;
+
+	if (gCvars.aimbot_mode == 2)
+		BulletTime(pLocal);
 
 	if (!(pLocal->GetFlags() & FL_ONGROUND) && pCommand->buttons & IN_JUMP)
 	{
