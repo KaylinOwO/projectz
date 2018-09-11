@@ -1,25 +1,16 @@
 #include "Aimbot.h"
 #include "Util.h"
 #include "Backtrack.h"
-#include "Misc.h"
-
-
 CAimbot gAim;
-
 #define TICK_INTERVAL			(gInts.globals->interval_per_tick)
-
-
 #define TIME_TO_TICKS( dt )		( (int)( 0.5f + (float)(dt) / TICK_INTERVAL ) )
 #define TICKS_TO_TIME( t )		( TICK_INTERVAL *( t ) )
-
 #define tick_interval gInts.globals->interval_per_tick
 #define tick_intervalsqr tick_interval * tick_interval
-
 bool CAimbot::CanAmbassadorHeadshot(CBaseEntity* pLocal)
 {
 	return gInts.globals->curtime - pLocal->GetActiveWeapon()->m_flLastFireTime() >= 0.930;//1.0;
 }
-
 void DoNoRecoil(CBaseEntity* pLocal, CUserCmd* pCommand)
 {
 	if (pLocal)
@@ -32,7 +23,6 @@ void DoNoRecoil(CBaseEntity* pLocal, CUserCmd* pCommand)
 		}
 	}
 }
-
 Vector CAimbot::calc_angle(Vector src, Vector dst)
 {
 	Vector AimAngles, delta;
@@ -61,75 +51,68 @@ float CAimbot::GetFOV(Vector angle, Vector src, Vector dst)
 	Vector ang, aim;
 	float mag, u_dot_v;
 	ang = calc_angle(src, dst);
-
-
 	MakeVector(angle, aim);
 	MakeVector(ang, ang);
-
 	mag = sqrtf(pow(aim.x, 2) + pow(aim.y, 2) + pow(aim.z, 2));
 	u_dot_v = aim.Dot(ang);
-
 	return RAD2DEG(acos(u_dot_v / (pow(mag, 2))));
 }
-
-
 void FixMove(CUserCmd* pCmd, Vector m_vOldAngles, float m_fOldForward, float m_fOldSidemove)
 {
 	float deltaView = pCmd->viewangles.y - m_vOldAngles.y;
 	float f1;
 	float f2;
-
 	if (m_vOldAngles.y < 0.f)
 		f1 = 360.0f + m_vOldAngles.y;
 	else
 		f1 = m_vOldAngles.y;
-
 	if (pCmd->viewangles.y < 0.0f)
 		f2 = 360.0f + pCmd->viewangles.y;
 	else
 		f2 = pCmd->viewangles.y;
-
 	if (f2 < f1)
 		deltaView = abs(f2 - f1);
 	else
 		deltaView = 360.0f - abs(f1 - f2);
 	deltaView = 360.0f - deltaView;
-
 	pCmd->forwardmove = cos(DEG2RAD(deltaView)) * m_fOldForward + cos(DEG2RAD(deltaView + 90.f)) * m_fOldSidemove;
 	pCmd->sidemove = sin(DEG2RAD(deltaView)) * m_fOldForward + sin(DEG2RAD(deltaView + 90.f)) * m_fOldSidemove;
 }
-
-
+/*bool BulletTime(CBaseEntity* pLocal)
+{
+if (!pLocal) return false;
+ auto tick_base = pLocal->iTickBase();
+if (!tick_base) return false;
+ auto local_weapon = pLocal->GetActiveWeapon();
+if (local_weapon == nullptr) return false;
+ auto next_attack = local_weapon->get_next_attack();
+auto can_tick_base = next_attack <= TICKS_TO_TIME(tick_base);
+ return can_tick_base;
+}*/
 bool IsVisiblePoint(CBaseEntity* pLocal, Vector Point)
 {
 	trace_t tr; Ray_t ray; CTraceFilter filter;
 	ray.Init(pLocal->GetEyePosition(), Point);
 	gInts.EngineTrace->TraceRay(ray, MASK_SOLID, &filter, &tr);
-
 	if (tr.fraction > 0.9f) return true;
 	return false;
 }
-
 void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 {
 	Vector m_vOldViewAngle = pCommand->viewangles;
 	float m_fOldSideMove = pCommand->sidemove;
 	float m_fOldForwardMove = pCommand->forwardmove;
-
 	if (pLocal->IsAlive() == false)
 		return;
-
 	gCvars.iAimbotIndex = -1;
-
+	//if (gCvars.aimbot_mode == 2)
+	//BulletTime(pLocal);
 	if (!gCvars.aimbot_active)
 		return;
-
 	if (gCvars.aimbot_key_enabled && !Util->IsKeyPressed(gCvars.aimbot_key))
 		return;
-
 	if (!pLocal->GetActiveWeapon())
 		return;
-
 	if (!gCvars.aimbot_projectile && GAME_TF2)
 	{
 		auto id = pLocal->GetActiveWeapon()->GetItemDefinitionIndex(); //This ignores all projectile weapons, doesn't work for strange/killstreak/etc
@@ -212,7 +195,6 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 			|| id == (int)medicweapons::WPN_QuickFix
 			|| id == (int)medicweapons::WPN_SyringeGun
 			|| id == (int)medicweapons::WPN_Vaccinator
-
 #pragma endregion
 #pragma region sniper
 			|| id == (int)sniperweapons::WPN_CompoundBow
@@ -233,18 +215,12 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 			)
 			return;
 	}
-
-
 	CBaseEntity* pEntity = GetBaseEntity(GetBestTarget(pLocal, pCommand));
-
 	if (!pEntity)
 		return;
-
 	int iBestHitbox = GetBestHitbox(pLocal, pEntity);
-
 	if (iBestHitbox == -1)
 		return;
-
 	if (GAME_TF2)
 	{
 		auto pWep = pLocal->GetActiveWeapon();
@@ -252,28 +228,21 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 			if (pWep->GetItemDefinitionIndex() == spyweapons::WPN_Ambassador || pWep->GetItemDefinitionIndex() == spyweapons::WPN_FestiveAmbassador)
 				if (!CanAmbassadorHeadshot(pLocal)) return;
 	}
-
 	Vector vEntity;
-
 	if (gCvars.aimbot_aimatbacktrack && gCvars.misc_backtracking) //Aims at backtrack ticks 8 and below, not really useful, will just improve accuracy slightly so not worth including in patch notes.
 		for (int i = 0; i < 8; i++)
 			vEntity = headPositions[pEntity->GetIndex()][i].hitboxpos;
 	else
 		vEntity = pEntity->GetHitboxPosition(iBestHitbox);
-
 	Vector vLocal = pLocal->GetEyePosition();
-
 	Vector vAngs;
-
 	if (gCvars.aimbot_projectile && GAME_TF2)
 	{
 		CBaseCombatWeapon* pWeapon = pLocal->GetActiveWeapon();
 		if (!pWeapon) return;
-
 		int item_index = pWeapon->GetItemDefinitionIndex();
 		int weapon_slot;
 		weapon_slot = pWeapon->GetSlot();
-
 		auto get_speed = [&pLocal, &pWeapon, &pEntity, &item_index]() -> float
 		{
 			auto weapon_speed = 0.0f;
@@ -381,19 +350,16 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 		{
 			if (pEntity->GetFlags() & FL_ONGROUND)
 				return 0.0f;
-
 			auto distance_to_ground = [&pEntity](Vector origin) -> float
 			{
 				trace_t ground_trace; Ray_t ray;
 				CTraceFilter filter; filter.pSkip = pEntity;
 				Vector endpos = origin;
-
 				endpos.z -= 8192;
 				ray.Init(origin, endpos);
 				gInts.EngineTrace->TraceRay(ray, MASK_PLAYERSOLID, &filter, &ground_trace);
 				return 8192.0f * ground_trace.fraction;
 			};
-
 			Vector origin = pEntity->GetAbsOrigin();
 			float v1 = distance_to_ground(origin + Vector(10.0f, 10.0f, 0.0f));
 			float v2 = distance_to_ground(origin + Vector(-10.0f, 10.0f, 0.0f));
@@ -410,50 +376,37 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 				vEntity = pEntity->GetAbsOrigin();
 				vEntity[2] += 10.0f;
 			}
-
 			auto hitbox_pred = [&pLocal, &pEntity, &isonGround](Vector hitbox, float speed, float gravity, float distance_to_ground) -> Vector
 			{
 				auto best_hitbox = hitbox;
 				auto predicted_time = ((pLocal->GetEyePosition().DistTo(hitbox) / speed) + tick_interval);
 				auto server_gravity = gInts.cvar->FindVar("sv_gravity")->GetFloat();
-
 				auto vec_velocity = Util->EstimateAbsVelocity(pEntity);
 				vec_velocity[2] += (-server_gravity) * tick_intervalsqr + (gravity * tick_intervalsqr);
-
 				best_hitbox[0] += (vec_velocity[0] * predicted_time) + tick_interval;
 				best_hitbox[1] += (vec_velocity[1] * predicted_time) + tick_interval;
 				best_hitbox[2] += (isonGround ? (vec_velocity[2] * predicted_time) + tick_interval :
 					(0.5 * (-server_gravity + gravity)* pow(predicted_time, 2) + vec_velocity[2] * predicted_time)) + tick_interval;
-
 				if (distance_to_ground > 0.0f)
 					if (best_hitbox[2] < hitbox[2] - distance_to_ground)
 						best_hitbox[2] = hitbox[2] - distance_to_ground;
-
 				return best_hitbox;
 			};
-
 			vEntity = hitbox_pred(vEntity, get_speed(), get_gravity(), distance_to_ground());
 		}
 	}
-
 	VectorAngles((vEntity - vLocal), vAngs);
-
 	//ClampAngle(vAngs);
-
 	//DoNoRecoil(pLocal, pCommand); //Large crashy bois
-
 	gCvars.iAimbotIndex = pEntity->GetIndex();
-
 	if (gCvars.aimbot_autoshoot)
 		pCommand->buttons |= IN_ATTACK;
-
 	if (gCvars.aimbot_smooth && gCvars.aimbot_mode == 1)
 	{
 		Vector vDelta(pCommand->viewangles - vAngs);
 		AngleNormalize(vDelta);
 		vAngs = pCommand->viewangles - vDelta / gCvars.aimbot_smooth_amt;
 	}
-
 	if (GAME_TF2)
 	{
 		auto pWep = pLocal->GetActiveWeapon();
@@ -464,7 +417,6 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 			Vector m_vOldViewAngle = pCommand->viewangles;
 			float m_fOldSideMove = pCommand->sidemove;
 			float m_fOldForwardMove = pCommand->forwardmove;
-
 			if (gCvars.aimbot_mode == 2)
 			{
 				ClampAngle(vAngs);
@@ -488,7 +440,6 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 		Vector m_vOldViewAngle = pCommand->viewangles;
 		float m_fOldSideMove = pCommand->sidemove;
 		float m_fOldForwardMove = pCommand->forwardmove;
-
 		if (gCvars.aimbot_mode == 2)
 		{
 			ClampAngle(vAngs);
@@ -501,43 +452,38 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 			gInts.Engine->SetViewAngles(pCommand->viewangles);
 		}
 	}
-
 	Util->FixMove(pCommand, m_vOldViewAngle, m_fOldForwardMove, m_fOldSideMove);
 }
-
 int CAimbot::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 {
 	int iBestTarget = -1;
 	//this num could be smaller 
 	float flDistToBest = 99999.f;
 	double minimalDistance = 99999.0;
-
 	Vector vLocal = pLocal->GetEyePosition();
-
 	for (int i = 1; i <= gInts.Engine->GetMaxClients(); i++)
 	{
 		if (i == me)
 			continue;
-
 		CBaseEntity* pEntity = GetBaseEntity(i);
-
 		if (!pEntity)
 			continue;
-
 		if (pEntity->IsDormant())
 			continue;
-
-
 		auto pWeap = pLocal->GetActiveWeapon(); if (!pWeap) continue;
 		if (GAME_TF2)
 		{
 			auto isMedic = (pLocal->GetClassNum() == TF2_Medic && pWeap->GetSlot() == 1);
-
-				 if (pEntity->GetLifeState() != LIFE_ALIVE || isMedic && pEntity->GetTeamNum() != pLocal->GetTeamNum())
+			if (pEntity->GetLifeState() != LIFE_ALIVE || !isMedic && !gCvars.aimbot_deathmatch && pEntity->GetTeamNum() == pLocal->GetTeamNum())
+				continue;
+			else if (pEntity->GetLifeState() != LIFE_ALIVE || isMedic && pEntity->GetTeamNum() != pLocal->GetTeamNum())
 				continue;
 		}
-
-
+		else
+		{
+			if (pEntity->GetLifeState() != LIFE_ALIVE || !gCvars.aimbot_deathmatch && pEntity->GetTeamNum() == pLocal->GetTeamNum())
+				continue;
+		}
 		if (GAME_TF2)
 		{
 			if (pEntity->GetCond() & TFCond_Ubercharged ||
@@ -545,20 +491,17 @@ int CAimbot::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 				pEntity->GetCond() & TFCond_Bonked)
 				continue;
 		}
-
 		if (GAME_TF2)
 		{
 			if (gCvars.aimbot_ignorecloaked && pEntity->GetCond() & TFCond_Cloaked)
 				continue;
 		}
-
 		if (GAME_TF2)
 		{
 			auto isMedic = (pLocal->GetClassNum() == TF2_Medic && pWeap->GetSlot() == 1);
 			if (isMedic)
 				minimalDistance = 21.8f;
 		}
-
 		if (GAME_TF2)
 		{
 			auto pWep = pLocal->GetActiveWeapon();
@@ -566,31 +509,22 @@ int CAimbot::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 			auto urmomgay = pClass == demomanweapons::WPN_Sword || pClass == demomanweapons::WPN_FestiveEyelander || pClass == demomanweapons::WPN_Golfclub || pClass == demomanweapons::WPN_ScottsSkullctter || pClass == demomanweapons::WPN_Headless;
 			if (pWep->GetSlot() == 2 && !urmomgay)
 				minimalDistance = 8.4;
-
 			if (pClass == demomanweapons::WPN_Sword || pClass == demomanweapons::WPN_FestiveEyelander || pClass == demomanweapons::WPN_Golfclub || pClass == demomanweapons::WPN_ScottsSkullctter || pClass == demomanweapons::WPN_Headless)
 				minimalDistance = 12.0;
-
 			if (pLocal->szGetClass() == "Pyro" && (pClass == pyroweapons::WPN_Backburner || pClass == pyroweapons::WPN_Degreaser || pClass == pyroweapons::WPN_FestiveBackburner || pClass == pyroweapons::WPN_FestiveFlamethrower || pClass == pyroweapons::WPN_Flamethrower || pClass == pyroweapons::WPN_Phlogistinator || pClass == pyroweapons::WPN_Rainblower))
 				minimalDistance = 17.0;
 		}
-
 		int iBestHitbox = GetBestHitbox(pLocal, pEntity);
-
 		if (iBestHitbox == -1)
 			continue;
-
 		Vector vEntity;
-
 		if (gCvars.aimbot_aimatbacktrack && gCvars.misc_backtracking)
 			for (int i = 0; i < 8; i++)
 				vEntity = headPositions[pEntity->GetIndex()][i].hitboxpos;
 		else
 			vEntity = pEntity->GetHitboxPosition(iBestHitbox);
-
 		if (!gCvars.PlayerMode[i])
 			continue;
-
-
 		if (GAME_TF2)
 		{
 			auto pWep = pLocal->GetActiveWeapon();
@@ -603,11 +537,8 @@ int CAimbot::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 				{
 					if (!(pLocal->GetCond() & tf_cond::TFCond_Zoomed))
 						return -1;
-
 					if (damage < 10.f)
 						return -1;
-
-
 				}
 				if (gCvars.aimbot_waitforcharge) //This isn't the best code but it works for raging.
 				{
@@ -616,36 +547,28 @@ int CAimbot::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 				}
 			}
 		}
-
 		float flFOV = GetFOV(pCommand->viewangles, vLocal, vEntity);
 		float distance = Util->flGetDistance(vEntity, pLocal->GetEyePosition());
-
 		if (distance < minimalDistance)
 		{
 			if (flFOV < flDistToBest && flFOV < gCvars.aimbot_fov)
 			{
 				if (gCvars.PlayerMode[i] == 2)
 					return i;
-
 				flDistToBest = flFOV;
 				gCvars.iAimbotIndex = i;
 				iBestTarget = i;
 			}
 		}
-
 		if (gCvars.PlayerMode[i] == 2) //always aim at rage targets first
 			return i;
 	}
-
 	return iBestTarget;
 }
-
 int CAimbot::GetBestHitbox(CBaseEntity* pLocal, CBaseEntity* pEntity)
 {
 	int iBestHitbox = -1;
-
 	iBestHitbox = 4;
-
 	if (GAME_CSS || GAME_DODS)
 	{
 		if (gCvars.aimbot_hitscan && !gCvars.aimbot_aimatbacktrack)
@@ -663,7 +586,6 @@ int CAimbot::GetBestHitbox(CBaseEntity* pLocal, CBaseEntity* pEntity)
 			iBestHitbox = 0;
 		else
 			iBestHitbox = 4;
-
 		if (gCvars.aimbot_hitscan && !gCvars.aimbot_aimatbacktrack)
 			for (int i = iBestHitbox; i < 17; i++)
 				if (Util->IsVisible(pLocal, pEntity, pLocal->GetEyePosition(), pEntity->GetHitboxPosition(i)))
@@ -680,12 +602,9 @@ int CAimbot::GetBestHitbox(CBaseEntity* pLocal, CBaseEntity* pEntity)
 		else
 			iBestHitbox = 4;
 	}
-
 	if (pEntity->GetHitboxPosition(iBestHitbox).IsZero())
 		return -1;
-
 	if (!Util->IsVisible(pLocal, pEntity, pLocal->GetEyePosition(), pEntity->GetHitboxPosition(iBestHitbox)))
 		return -1;
-
 	return iBestHitbox;
 }

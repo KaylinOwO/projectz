@@ -115,6 +115,7 @@
     <ClCompile Include="NPCAimbot.cpp" />
     <ClCompile Include="Panels.cpp" />
     <ClCompile Include="CSignature.cpp" />
+    <ClCompile Include="TimeShift.cpp" />
     <ClCompile Include="Triggerbot.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="VMTHooks.cpp" />
@@ -151,6 +152,7 @@
     <ClInclude Include="CSignature.h" />
     <ClInclude Include="singleton.h" />
     <ClInclude Include="studio.h" />
+    <ClInclude Include="TimeShift.h" />
     <ClInclude Include="Triggerbot.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="utlvec.h" />

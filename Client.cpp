@@ -5,6 +5,7 @@
 #include "Triggerbot.h"
 #include "Misc.h"
 #include "Backtrack.h"
+#include "TimeShift.h"
 #include "Glow.h"
 #include "NPCAimbot.h"
 #include "CDrawManager.h"
@@ -49,6 +50,7 @@ bool __fastcall Hooked_CreateMove(PVOID ClientMode, int edx, float input_sample_
 		gMisc.Run(pLocal, pCommand, bSendPacket); //Misc Features
 		gAim.Run(pLocal, pCommand); //Aimbot
 		gTrigger.Run(pLocal, pCommand); //Triggerbot
+		gShift.Run(pLocal, pCommand); //Time Shift
 		gBacktracking.Run(pCommand); //Backtrack (can cause crashes)
 		if (GAME_TF2)
 			gBlast.Run(pLocal, pCommand);
@@ -111,128 +113,11 @@ void __stdcall Hooked_DrawModelExecute(void *state, ModelRenderInfo_t &pInfo, ma
 		CBaseEntity* pModelEntity = (CBaseEntity*)gInts.EntList->GetClientEntity(pInfo.entity_index);
 		CBaseEntity* pLocal = (CBaseEntity*)gInts.EntList->GetClientEntity(gInts.Engine->GetLocalPlayer());
 
-		if (strstr(pszModelName, "models/player") && gCvars.esp_historyticks)
-		{
-
-			if (pModelEntity && pLocal)
-			{
-				if (pModelEntity->IsAlive() && pModelEntity->GetHealth() > 0 && !pModelEntity->IsDormant()) {
-					Color RGBA = gDrawManager.GetPlayerColor(pModelEntity);
-
-					if (gCvars.esp_historyticks)
-					{
-						if (gCvars.esp_historyticks_mode == 2 || gCvars.esp_historyticks_mode == 3)
-						{
-
-							//Hidden UnLit
-							gCvars.Hid_MatUnLit->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, true);
-							gCvars.Hid_MatUnLit->ColorModulate(RGBA[0], RGBA[1], RGBA[2]);
-							gCvars.Hid_MatUnLit->AddRef();
-
-							ForceMaterial(gCvars.Hid_MatUnLit, RGBA);
-							gInts.MdlRender->DrawModelExecute(state, pInfo, pCustomBoneToWorld);
-
-							//Visible UnLit
-							gCvars.Vis_MatUnLit->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, false);
-							gCvars.Vis_MatUnLit->ColorModulate(RGBA[0], RGBA[1], RGBA[2]);
-							gCvars.Vis_MatUnLit->AddRef();
-
-
-							for (int t = 0; t < 12; t++)
-								gInts.MdlRender->DrawModelExecute(state, pInfo, headPositions[pInfo.entity_index][t].matrix);
-						}
-					}
-				}
-				else
-				{
-					gInts.MdlRender->ForcedMaterialOverride(NULL, OverrideType_t::OVERRIDE_NORMAL);
-				}
-			}
-		}
-
-
-		if (strstr(pszModelName, "models/player") && gCvars.esp_historyticks)
-		{
-
-			if (pModelEntity && pLocal)
-			{
-
-				if (gCvars.esp_enemyonly)
-				{
-					if (pModelEntity->IsAlive() && pModelEntity->GetHealth() > 0 && !pModelEntity->IsDormant() && pModelEntity->GetTeamNum() != pLocal->GetTeamNum()) {
-						Color RGBA = gDrawManager.GetPlayerColor(pModelEntity);
-
-						if (gCvars.esp_historyticks)
-						{
-							if (gCvars.esp_historyticks_mode == 2 || gCvars.esp_historyticks_mode == 3)
-							{
-
-								//Hidden UnLit
-								gCvars.Hid_MatUnLit->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, true);
-								gCvars.Hid_MatUnLit->ColorModulate(RGBA[0], RGBA[1], RGBA[2]);
-								gCvars.Hid_MatUnLit->AddRef();
-
-								ForceMaterial(gCvars.Hid_MatUnLit, RGBA);
-								gInts.MdlRender->DrawModelExecute(state, pInfo, pCustomBoneToWorld);
-
-								//Visible UnLit
-								gCvars.Vis_MatUnLit->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, false);
-								gCvars.Vis_MatUnLit->ColorModulate(RGBA[0], RGBA[1], RGBA[2]);
-								gCvars.Vis_MatUnLit->AddRef();
-
-
-								for (int t = 0; t < 12; t++)
-									gInts.MdlRender->DrawModelExecute(state, pInfo, headPositions[pInfo.entity_index][t].matrix);
-							}
-						}
-					}
-					else
-					{
-						gInts.MdlRender->ForcedMaterialOverride(NULL, OverrideType_t::OVERRIDE_NORMAL);
-					}
-				}
-				else if (!gCvars.esp_enemyonly)
-				{
-					if (pModelEntity->IsAlive() && pModelEntity->GetHealth() > 0 && !pModelEntity->IsDormant()) {
-						Color RGBA = gDrawManager.GetPlayerColor(pModelEntity);
-
-						if (gCvars.esp_historyticks)
-						{
-							if (gCvars.esp_historyticks_mode == 2 || gCvars.esp_historyticks_mode == 3)
-							{
-
-								//Hidden UnLit
-								gCvars.Hid_MatUnLit->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, true);
-								gCvars.Hid_MatUnLit->ColorModulate(RGBA[0], RGBA[1], RGBA[2]);
-								gCvars.Hid_MatUnLit->AddRef();
-
-								ForceMaterial(gCvars.Hid_MatUnLit, RGBA);
-								gInts.MdlRender->DrawModelExecute(state, pInfo, pCustomBoneToWorld);
-
-								//Visible UnLit
-								gCvars.Vis_MatUnLit->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, false);
-								gCvars.Vis_MatUnLit->ColorModulate(RGBA[0], RGBA[1], RGBA[2]);
-								gCvars.Vis_MatUnLit->AddRef();
-
-
-								for (int t = 0; t < 12; t++)
-									gInts.MdlRender->DrawModelExecute(state, pInfo, headPositions[pInfo.entity_index][t].matrix);
-							}
-						}
-					}
-					else
-					{
-						gInts.MdlRender->ForcedMaterialOverride(NULL, OverrideType_t::OVERRIDE_NORMAL);
-					}
-				}
-
-			}
-		}
 
 		if (strstr(pszModelName, "models/player") && gCvars.esp_chams)
 		{
 
-			if (pModelEntity && pLocal) {
+			if (pModelEntity) {
 
 				if (gCvars.esp_enemyonly)
 				{
@@ -255,24 +140,6 @@ void __stdcall Hooked_DrawModelExecute(void *state, ModelRenderInfo_t &pInfo, ma
 							gCvars.Vis_MatUnLit->AddRef();
 
 							ForceMaterial(gCvars.Vis_MatUnLit, RGBA);
-							gInts.MdlRender->DrawModelExecute(state, pInfo, pCustomBoneToWorld);
-						}
-						else if (gCvars.esp_chams_mode == 2)
-						{
-							//Hidden Lit
-							gCvars.Hid_MatLit->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, true);
-							gCvars.Hid_MatLit->ColorModulate(RGBA[0], RGBA[1], RGBA[2]);
-							gCvars.Hid_MatLit->AddRef();
-
-							ForceMaterial(gCvars.Hid_MatLit, RGBA);
-							gInts.MdlRender->DrawModelExecute(state, pInfo, pCustomBoneToWorld);
-
-							//Visible Lit
-							gCvars.Vis_MatLit->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, false);
-							gCvars.Vis_MatLit->ColorModulate(RGBA[0], RGBA[1], RGBA[2]);
-							gCvars.Vis_MatLit->AddRef();
-
-							ForceMaterial(gCvars.Vis_MatLit, RGBA);
 							gInts.MdlRender->DrawModelExecute(state, pInfo, pCustomBoneToWorld);
 						}
 					}

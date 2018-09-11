@@ -8,6 +8,7 @@ class CGlobalVariables
 public:
     void Load(void);
 	void Save(void);
+	void Clear(void);
 
 	int iAimbotIndex = -1;
 
@@ -47,6 +48,7 @@ public:
 	int aimbot_mode = 1; 
 	bool aimbot_autoshoot;
 	bool aimbot_waitforcharge;
+	bool aimbot_deathmatch;
 	bool aimbot_zoomedonly;
 	bool aimbot_ignorecloaked;
 	bool aimbot_ignoreabove100;
@@ -77,8 +79,6 @@ public:
 	bool esp_health;
 	int esp_health_mode = 1;
 	bool esp_glow;
-	bool esp_historyticks;
-	int esp_historyticks_mode = 1;
 	bool esp_dontdrawteammates;
 	bool esp_debug;
 	bool esp_chams;
@@ -107,6 +107,7 @@ public:
 	bool misc_weapons;
 	int misc_weapons_mode;
 	bool misc_backtracking;
+	bool misc_backtracking_deathmatch;
 	bool misc_fastcrouch;
 	int misc_zangle;
 	bool misc_fovoverride;
@@ -119,6 +120,11 @@ public:
 	bool misc_announcer;
 	int misc_configselection = 1;
 	bool misc_novisrecoil;
+
+	bool timeshift_switch;
+	bool timeshift_enabled;
+	int timeshift_key = 1;
+	int timeshift_value = 800;
 
 	float PlayerMode[64] = {
 		1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,

@@ -44,6 +44,7 @@ private:
 	int CPWidth = 168, CPHeight = 179;
 	void SaveButton(const char* strText, int iTabIndex, int iX, int iY);
 	void LoadButton(const char* strText, int iTabIndex, int iX, int iY);
+	void ClearButton(const char* strText, int iTabIndex, int iX, int iY);
 	void ResetColors(const char* strText, int iTabIndex, int iX, int iY);
 	void GetMousePos();
 	void GetClicked();
@@ -77,7 +78,6 @@ const char* health[3] = { "Text", "Bar", "Both" };
 const char* method[2] = { "Plain", "Silent"};
 const char* chams[2] = { "Material", "Flat"};
 const char* box[3] = { "Normal", "Outlined", "Corner" };
-const char* ticks[3] = { "Dots", "Chams", "Both" };
 const char* cfg[4] = { "Default", "Legit", "Rage" };
 
 void CMenu::Draw(int iMenuWidth, int iMenuHeight, int iSWidth, int iSHeight)
@@ -235,6 +235,22 @@ void CMenu::LoadButton(const char* strText, int iTabIndex, int iX, int iY)
 
 		if (Clicked(iX, iY, 125, 20))
 			gCvars.Load();
+	}
+}
+
+void CMenu::ClearButton(const char* strText, int iTabIndex, int iX, int iY)
+{
+	if (iTab == iTabIndex)
+	{
+		DrawOutlinedRectM(iX, iY, 125, 20, Color(93, 0, 114, 255));
+
+		DrawStringM2(iX + 12, iY + 10, Color(255, 255, 255, 255), strText);
+
+		if (Hovering(iX, iY, 125, 20))
+			DrawRectM(iX, iY, 125, 20, Color(93, 0, 114, 125));
+
+		if (Clicked(iX, iY, 125, 20))
+			gCvars.Clear();
 	}
 }
 
@@ -416,6 +432,7 @@ void CMenu::DrawButtons()
 		DrawButton("Zoomed Only", 1, 8, y += add, gCvars.aimbot_zoomedonly);
 	}
 	DrawButton("Autoshoot", 1, 8, y += add, gCvars.aimbot_autoshoot);
+	DrawButton("Aim at Teammates", 1, 8, y += add, gCvars.aimbot_deathmatch);
 	DrawButton("Aim at Backtrack", 1, 8, y += add, gCvars.aimbot_aimatbacktrack);
 	if (GAME_TF2)
 	{
@@ -433,7 +450,6 @@ void CMenu::DrawButtons()
 	y = 58;
 	DrawButton("Hitscan Triggerbot", 2, 8, y, gCvars.triggerbot_active);
 	DrawButton("Head Only", 2, 12, y += add, gCvars.triggerbot_headonly);
-	DrawButton("Ignore Cloaked", 2, 12, y += add, gCvars.triggerbot_ignorecloaked);
 	DrawDropdown("Key", 2, iWidth - 160, 58, add, key2, 6, gCvars.triggerbot_key);
 	if (GAME_TF2)
 	{
@@ -465,8 +481,7 @@ void CMenu::DrawButtons()
 		DrawDropdown("Hands", 3, iWidth - 58, 160, add, hands, 3, gCvars.misc_hands_mode);
 		DrawDropdown("Box", 3, iWidth - 160, 58, add, box, 3, gCvars.esp_box_mode);
 		DrawDropdown("Health", 3, iWidth - 160, 160, add, health, 3, gCvars.esp_health_mode);
-		DrawButton("History Ticks", 3, 8, y += add, gCvars.esp_historyticks);
-		DrawDropdown("History Ticks", 3, iWidth - 160, 260, add, ticks, 3, gCvars.esp_historyticks_mode);
+
 	}
 	else
 	{
@@ -510,10 +525,20 @@ void CMenu::DrawButtons()
 	DrawButton("Auto Strafe", 4, 8, y += add, gCvars.misc_autostrafe);
 	if (gInts.Engine->GetAppId() != 440)
 	{
+		DrawButton("Time Shift", 4, 8, y += add, gCvars.timeshift_enabled);
+		if (gCvars.timeshift_enabled)
+			DrawSlider("", 4, 12, y += add, 180, 1000, gCvars.timeshift_value);
+		DrawDropdown("TS Key", 4, iWidth - 160, 58, add, key2, 6, gCvars.timeshift_key);
+
+		DrawButton("Server Lagger", 4, 8, y += add, gCvars.misc_serverlag);
+		if (gCvars.misc_serverlag)
+			DrawSlider("", 4, 12, y += add, 180, 500, gCvars.misc_serverlag_value);
+		DrawDropdown("SL Key", 4, iWidth - 58, 58, add, key2, 6, gCvars.misc_serverlag_key);
+
 		DrawButton("Anti-Aim", 4, 8, y += add, gCvars.misc_angles);
 
 		DrawDropdown("Pitch", 4, iWidth - 160, 270, add, aax, 4, gCvars.misc_aax);
-		DrawDropdown("Yaw", 4, iWidth - 58, 270, add, aay, 7, gCvars.misc_aay);
+		DrawDropdown("Yaw", 4, iWidth - 58, 270, add, aay, 5, gCvars.misc_aay);
 
 	}
 	else if (GAME_TF2)
@@ -526,6 +551,8 @@ void CMenu::DrawButtons()
 	}
 	DrawButton("Announcer", 4, 8, y += add, gCvars.misc_announcer);
 	DrawButton("Backtrack", 4, 8, y += add, gCvars.misc_backtracking);
+	if (gCvars.misc_backtracking)
+		DrawButton("Backtrack Teammates", 4, 12, y += add, gCvars.misc_backtracking_deathmatch);
 	DrawButton("Fastcrouch", 4, 8, y += add, gCvars.misc_fastcrouch);
 	DrawButton("Fakelag", 4, 8, y += add, gCvars.misc_fakelag);
 	if (gCvars.misc_fakelag)
@@ -533,6 +560,7 @@ void CMenu::DrawButtons()
 
 	SaveButton("Save Configuration", 4, 20, y += 300);
 	LoadButton("Load Configuration", 4, 20, y += 25);
+	ClearButton("Clear Settings", 4, 20, y += 25);
 }
 
 

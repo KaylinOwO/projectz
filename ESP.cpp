@@ -552,23 +552,6 @@ void CESP::Player_ESP(CBaseEntity* pLocal, CBaseEntity* pEntity)
 		}
 	}
 
-	if (gCvars.esp_historyticks)
-	{
-		if (gCvars.esp_historyticks_mode == 1 || gCvars.esp_historyticks_mode == 3)
-		{
-			for (int t = 0; t < 12; t++)
-			{
-				Vector out;
-				if (gDrawManager.WorldToScreen(headPositions[pEntity->GetIndex()][t].hitboxpos, out))
-				{
-					gDrawManager.OutlineRect(out[0], out[1], 2, 2, Color(255, 255, 255, 255));
-					gDrawManager.OutlineRect(out[0] - 1, out[1] - 1, 3, 3, Color(255, 255, 255, 255));
-				}
-
-			}
-		}
-	}
-
 	if (gCvars.esp_bones) //bones
 	{
 		static int iLeftArmBones[] = { 8, 7, 6, 4 };

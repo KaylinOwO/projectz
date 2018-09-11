@@ -112,7 +112,7 @@ void __fastcall Hooked_PaintTraverse( PVOID pPanels, int edx, unsigned int vguiP
 			if (bMenuOpen)
 			{
 				bMeme = true;
-				HackMenu->Draw(800, 670, gScreenSize.iScreenWidth, gScreenSize.iScreenHeight);
+				HackMenu->Draw(800, 750, gScreenSize.iScreenWidth, gScreenSize.iScreenHeight);
 				gInts.Panels->SetMouseInputEnabled(vguiPanel, true); 
 			}
 			else if (bMeme)

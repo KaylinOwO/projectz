@@ -73,6 +73,9 @@
     <ClCompile Include="AutoAirblast.cpp">
       <Filter>Hacks\Auto Airblast</Filter>
     </ClCompile>
+    <ClCompile Include="TimeShift.cpp">
+      <Filter>Hacks\Timeshift</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CDrawManager.h">
@@ -192,6 +195,9 @@
     <ClInclude Include="ClassIds.h">
       <Filter>Headers</Filter>
     </ClInclude>
+    <ClInclude Include="TimeShift.h">
+      <Filter>Hacks\Timeshift</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Headers">
@@ -229,6 +235,9 @@
     </Filter>
     <Filter Include="Hacks\Auto Airblast">
       <UniqueIdentifier>{246cd601-6a38-448e-86fc-f2c7eea98c8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Hacks\Timeshift">
+      <UniqueIdentifier>{96f3acbc-6ba7-4512-bbe5-2a13cfba50a8}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
