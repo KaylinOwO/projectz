@@ -8,6 +8,7 @@ class CGlobalVariables
 public:
     void Load(void);
 	void Save(void);
+	void Clear(void);
 
 	int iAimbotIndex = -1;
 

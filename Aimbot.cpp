@@ -1,7 +1,6 @@
 #include "Aimbot.h"
 #include "Util.h"
 #include "Backtrack.h"
-#include "SDK.h"
 CAimbot gAim;
 #define TICK_INTERVAL			(gInts.globals->interval_per_tick)
 #define TIME_TO_TICKS( dt )		( (int)( 0.5f + (float)(dt) / TICK_INTERVAL ) )
@@ -515,7 +514,6 @@ int CAimbot::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 			if (pLocal->szGetClass() == "Pyro" && (pClass == pyroweapons::WPN_Backburner || pClass == pyroweapons::WPN_Degreaser || pClass == pyroweapons::WPN_FestiveBackburner || pClass == pyroweapons::WPN_FestiveFlamethrower || pClass == pyroweapons::WPN_Flamethrower || pClass == pyroweapons::WPN_Phlogistinator || pClass == pyroweapons::WPN_Rainblower))
 				minimalDistance = 17.0;
 		}
-
 		int iBestHitbox = GetBestHitbox(pLocal, pEntity);
 		if (iBestHitbox == -1)
 			continue;
@@ -567,7 +565,6 @@ int CAimbot::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 	}
 	return iBestTarget;
 }
-
 int CAimbot::GetBestHitbox(CBaseEntity* pLocal, CBaseEntity* pEntity)
 {
 	int iBestHitbox = -1;
