@@ -452,7 +452,10 @@ void CMenu::DrawButtons()
 	DrawButton("Enabled", 3, 8, y, gCvars.esp_active);
 	DrawButton("Enemy Only", 3, 8, y += add, gCvars.esp_enemyonly);
 	if (GAME_TF2)
-		DrawButton("Enemy Buildings", 3, 8, y += add, gCvars.esp_objects);
+	{
+		DrawButton("Draw Enemy Buildings", 3, 8, y += add, gCvars.esp_objects);
+		DrawButton("Dont Draw Cloaked", 3, 8, y += add, gCvars.esp_ignorecloaked);
+	}
 	DrawButton("Box", 3, 8, y += add, gCvars.esp_box);
 	DrawButton("Bones", 3, 8, y += add, gCvars.esp_bones);
 	DrawButton("Name", 3, 8, y += add, gCvars.esp_name);

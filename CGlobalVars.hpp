@@ -70,6 +70,7 @@ public:
 	bool esp_active;
 	int esp_pos;
 	bool esp_enemyonly;
+	bool esp_ignorecloaked;
 	bool esp_box;
 	bool esp_objects;
 	int esp_box_mode = 1;

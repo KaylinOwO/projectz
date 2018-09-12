@@ -352,6 +352,12 @@ void CESP::Run(CBaseEntity* pLocal)
 		if (gCvars.esp_enemyonly && pEntity->GetTeamNum() == pLocal->GetTeamNum())
 			continue;
 
+		if (GAME_TF2)
+		{
+			if (gCvars.esp_ignorecloaked && pEntity->GetCond() & TFCond_Cloaked)
+				continue;
+		}
+
 		Player_ESP(pLocal, pEntity);
 	}
 }
