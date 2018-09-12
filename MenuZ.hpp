@@ -44,7 +44,6 @@ private:
 	int CPWidth = 168, CPHeight = 179;
 	void SaveButton(const char* strText, int iTabIndex, int iX, int iY);
 	void LoadButton(const char* strText, int iTabIndex, int iX, int iY);
-	void ClearButton(const char* strText, int iTabIndex, int iX, int iY);
 	void ResetColors(const char* strText, int iTabIndex, int iX, int iY);
 	void GetMousePos();
 	void GetClicked();
@@ -235,22 +234,6 @@ void CMenu::LoadButton(const char* strText, int iTabIndex, int iX, int iY)
 
 		if (Clicked(iX, iY, 125, 20))
 			gCvars.Load();
-	}
-}
-
-void CMenu::ClearButton(const char* strText, int iTabIndex, int iX, int iY)
-{
-	if (iTab == iTabIndex)
-	{
-		DrawOutlinedRectM(iX, iY, 125, 20, Color(93, 0, 114, 255));
-
-		DrawStringM2(iX + 12, iY + 10, Color(255, 255, 255, 255), strText);
-
-		if (Hovering(iX, iY, 125, 20))
-			DrawRectM(iX, iY, 125, 20, Color(93, 0, 114, 125));
-
-		if (Clicked(iX, iY, 125, 20))
-			gCvars.Clear();
 	}
 }
 
@@ -546,7 +529,6 @@ void CMenu::DrawButtons()
 
 	SaveButton("Save Configuration", 4, 20, y += 300);
 	LoadButton("Load Configuration", 4, 20, y += 25);
-	ClearButton("Clear Settings", 4, 20, y += 25);
 }
 
 
