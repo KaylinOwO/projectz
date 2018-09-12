@@ -455,6 +455,7 @@ void CAimbot::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	}
 	Util->FixMove(pCommand, m_vOldViewAngle, m_fOldForwardMove, m_fOldSideMove);
 }
+
 int CAimbot::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 {
 	int iBestTarget = -1;
