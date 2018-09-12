@@ -75,6 +75,8 @@ void CGlobalVariables::Save(void)
 		{
 			gFileManager.WriteFloat("ESP", "Class", esp_class);
 			gFileManager.WriteFloat("ESP", "Glow", esp_glow);
+			gFileManager.WriteFloat("ESP", "Bones", esp_bones);
+			gFileManager.WriteFloat("ESP", "Enemy Buildings", esp_objects);
 			gFileManager.WriteFloat("ESP", "Chams", esp_chams);
 			gFileManager.WriteFloat("ESP", "Chams Mode", esp_chams_mode);
 		}
@@ -176,7 +178,7 @@ void CGlobalVariables::Load(void)
 		aimbot_deathmatch = gFileManager.ReadFloat("Aimbot", "deathmatch", aimbot_deathmatch);
 		aimbot_resolver = gFileManager.ReadFloat("Aimbot", "Resolver", aimbot_resolver);
 		aimbot_autoshoot = gFileManager.ReadFloat("Aimbot", "Autoshoot", aimbot_autoshoot);
-		aimbot_deathmatch = gFileManager.ReadFloat("Aimbot", "Aim at Backtrack", aimbot_deathmatch);
+		aimbot_deathmatch = gFileManager.ReadFloat("Aimbot", "Aim at Teammates", aimbot_deathmatch);
 		aimbot_aimatbacktrack = gFileManager.ReadFloat("Aimbot", "Aim at Backtrack", aimbot_aimatbacktrack);
 		aimbot_ignorecloaked = gFileManager.ReadFloat("Aimbot", "Ignore Cloaked", aimbot_ignorecloaked);
 	}
@@ -219,6 +221,8 @@ void CGlobalVariables::Load(void)
 			esp_class = gFileManager.ReadFloat("ESP", "Class", esp_class);
 			esp_glow = gFileManager.ReadFloat("ESP", "Glow", esp_glow);
 			esp_chams = gFileManager.ReadFloat("ESP", "Chams", esp_chams);
+			esp_bones = gFileManager.ReadFloat("ESP", "Bones", esp_bones);
+			esp_objects = gFileManager.ReadFloat("ESP", "Enemy Buildings", esp_objects);
 			esp_chams_mode = gFileManager.ReadFloat("ESP", "Chams Mode", esp_chams_mode);
 		}
 		esp_health = gFileManager.ReadFloat("ESP", "Health", esp_health);
@@ -288,92 +292,4 @@ void CGlobalVariables::Load(void)
 	triggerbot_key = gFileManager.ReadFloat("Hotkeys", "Triggerbot", triggerbot_key);
 	timeshift_key = gFileManager.ReadFloat("Hotkeys", "Time Shift", timeshift_key);
 	misc_serverlag_key = gFileManager.ReadFloat("Hotkeys", "Server Lagger", misc_serverlag_key);
-}
-
-// 
-// Clear settings
-//
-void CGlobalVariables::Clear(void)
-{
-	gCvars.aimbot_switch = false;
-	gCvars.aimbot_active = false;
-	gCvars.aimbot_key_enabled = false;
-	gCvars.aimbot_key = false;
-	gCvars.aimbot_hitscan = false;
-	gCvars.aimbot_fov = false;
-	gCvars.aimbot_smooth = false;
-	gCvars.aimbot_smooth_amt = false;
-	gCvars.aimbot_mode = false;
-	gCvars.aimbot_autoshoot = false;
-	gCvars.aimbot_waitforcharge = false;
-	gCvars.aimbot_zoomedonly = false;
-	gCvars.aimbot_ignorecloaked = false;
-	gCvars.aimbot_ignoreabove100 = false;
-	gCvars.aimbot_resolver = false;
-	gCvars.aimbot_projectile = false;
-	gCvars.aimbot_aimatbacktrack = false;
-
-	gCvars.triggerbot_switch = false;
-	gCvars.triggerbot_active = false;
-	gCvars.triggerbot_key = false;
-	gCvars.triggerbot_headonly = false;
-	gCvars.triggerbot_ignorecloaked = false;
-	gCvars.autoairblast_enabled = false;
-	gCvars.autoairblast_rage = false;
-	gCvars.autoairblast_silent = false;
-	gCvars.triggerbot_autobackstab = false;
-
-	gCvars.esp_switch = false;
-	gCvars.esp_active = false;
-	gCvars.esp_pos = false;
-	gCvars.esp_enemyonly = false;
-	gCvars.esp_box = false;
-	gCvars.esp_objects = false;
-	gCvars.esp_box_mode = false;
-	gCvars.esp_name = false;
-	gCvars.esp_class = false;
-	gCvars.esp_bones = false;
-	gCvars.esp_health = false;
-	gCvars.esp_health_mode = false;
-	gCvars.esp_glow = false;
-	gCvars.esp_dontdrawteammates = false;
-	gCvars.esp_debug = false;
-	gCvars.esp_chams = false;
-	gCvars.esp_chams_mode  = false;
-
-	gCvars.misc_switch = false;
-	gCvars.misc_bunnyhop = false;
-	gCvars.misc_autostrafe = false;
-	gCvars.misc_angles = false;
-	gCvars.misc_aax = false;
-	gCvars.misc_aay = false;
-	gCvars.misc_angles2 = false;
-	gCvars.misc_aaxa = false;
-	gCvars.misc_aaya = false;
-	gCvars.misc_thirdperson = false;
-	gCvars.misc_purebypass = false;
-	gCvars.misc_nozoom = false;
-	gCvars.misc_noscope = false;
-	gCvars.misc_noscope_disablecrosshair = false;
-	gCvars.misc_serverlag = false; 
-	gCvars.misc_serverlag_key = false; 
-	gCvars.misc_serverlag_value = false; 
-	gCvars.misc_nohats = false;
-	gCvars.misc_hands = false;
-	gCvars.misc_hands_mode = false;
-	gCvars.misc_weapons = false;
-	gCvars.misc_weapons_mode = false;
-	gCvars.misc_backtracking = false;
-	gCvars.misc_fastcrouch = false;
-	gCvars.misc_zangle = false;
-	gCvars.misc_fovoverride = false; 
-	gCvars.misc_fov_value = false; 
-	gCvars.misc_viewmodelfovoverride = false; 
-	gCvars.misc_viewmodelfov_value = false; 
-	gCvars.misc_tauntslide = false; 
-	gCvars.misc_fakelag = false; 
-	gCvars.misc_fakelag_value = false; 
-	gCvars.misc_announcer = false; 
-	gCvars.misc_configselection = false; 
-	gCvars.misc_novisrecoil = false; 
 }
