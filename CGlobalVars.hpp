@@ -54,6 +54,7 @@ public:
 	bool aimbot_resolver;
 	bool aimbot_projectile;
 	bool aimbot_aimatbacktrack;
+	int aimbot_priority = 1;
 
 	bool triggerbot_switch;
 	bool triggerbot_active;

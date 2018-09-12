@@ -78,6 +78,7 @@ const char* method[2] = { "Plain", "Silent"};
 const char* chams[2] = { "Material", "Flat"};
 const char* box[3] = { "Normal", "Outlined", "Corner" };
 const char* cfg[4] = { "Default", "Legit", "Rage" };
+const char* tpriority[2] = { "FOV", "Distance" };
 
 void CMenu::Draw(int iMenuWidth, int iMenuHeight, int iSWidth, int iSHeight)
 {
@@ -401,9 +402,11 @@ void CMenu::DrawButtons()
 	// Aimbot
 	//
 	DrawButton("Aimbot", 1, 8, y, gCvars.aimbot_active);
-	DrawButton("Key", 1, 8, y += add, gCvars.aimbot_key_enabled);
-	DrawDropdown("Key", 1, iWidth - 160, 58, add, key, 8, gCvars.aimbot_key);
+	DrawDropdown("Target Priority", 1, iWidth - 160, 58, add, tpriority, 2, gCvars.aimbot_priority);
 	DrawDropdown("Method", 1, iWidth - 58, 58, add, method, 2, gCvars.aimbot_mode);
+	DrawButton("Key", 1, 8, y += add, gCvars.aimbot_key_enabled);
+	DrawDropdown("Key", 1, iWidth - 160, 135, add, key, 8, gCvars.aimbot_key);
+	//DrawDropdown("Hands", 3, iWidth - 58, 160, add, hands, 3, gCvars.misc_hands_mode);
 	DrawButton("Hitscan", 1, 8, y += add, gCvars.aimbot_hitscan);
 	DrawSlider("FOV", 1, 8, y += add, 180, 180, gCvars.aimbot_fov);
 	DrawButton("Smoothing", 1, 8, y += add, gCvars.aimbot_smooth);

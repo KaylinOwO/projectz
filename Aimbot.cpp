@@ -550,18 +550,38 @@ int CAimbot::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 			}
 		}
 		float flFOV = GetFOV(pCommand->viewangles, vLocal, vEntity);
-		float distance = Util->flGetDistance(vEntity, pLocal->GetEyePosition());
-		if (distance < minimalDistance)
+		float distance;
+
+		if (gCvars.aimbot_priority == 1)
 		{
-			if (flFOV < flDistToBest && flFOV < gCvars.aimbot_fov)
+			distance = Util->flGetDistance(vEntity, pLocal->GetEyePosition());
+			if (distance < minimalDistance)
 			{
-				if (gCvars.PlayerMode[i] == 2)
-					return i;
-				flDistToBest = flFOV;
-				gCvars.iAimbotIndex = i;
-				iBestTarget = i;
+				if (flFOV < flDistToBest && flFOV < gCvars.aimbot_fov)
+				{
+					if (gCvars.PlayerMode[i] == 2)
+						return i;
+					flDistToBest = flFOV;
+					gCvars.iAimbotIndex = i;
+					iBestTarget = i;
+				}
 			}
 		}
+		else if (gCvars.aimbot_priority == 2)
+		{
+			distance = (vLocal - vEntity).Length();
+			if (distance < minimalDistance)
+			{
+				if (distance < flDistToBest)
+				{
+					flDistToBest = distance;
+					iBestTarget = i;
+				}
+			}
+		}
+		else
+			return -1;
+
 		if (gCvars.PlayerMode[i] == 2) //always aim at rage targets first
 			return i;
 	}
