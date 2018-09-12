@@ -257,6 +257,7 @@ void __stdcall Hooked_DrawModelExecute(void *state, ModelRenderInfo_t &pInfo, ma
 	hook.Rehook();
 }
 
+
 void __fastcall FrameStageNotifyThink(PVOID CHLClient, void *_this, ClientFrameStage_t Stage)
 {
 
