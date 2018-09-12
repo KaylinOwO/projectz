@@ -142,6 +142,24 @@ void __stdcall Hooked_DrawModelExecute(void *state, ModelRenderInfo_t &pInfo, ma
 							ForceMaterial(gCvars.Vis_MatUnLit, RGBA);
 							gInts.MdlRender->DrawModelExecute(state, pInfo, pCustomBoneToWorld);
 						}
+						else if (gCvars.esp_chams_mode == 2)
+						{
+							//Hidden Lit
+							gCvars.Hid_MatLit->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, true);
+							gCvars.Hid_MatLit->ColorModulate(RGBA[0], RGBA[1], RGBA[2]);
+							gCvars.Hid_MatLit->AddRef();
+
+							ForceMaterial(gCvars.Hid_MatLit, RGBA);
+							gInts.MdlRender->DrawModelExecute(state, pInfo, pCustomBoneToWorld);
+
+							//Visible Lit
+							gCvars.Vis_MatLit->SetMaterialVarFlag(MATERIAL_VAR_IGNOREZ, false);
+							gCvars.Vis_MatLit->ColorModulate(RGBA[0], RGBA[1], RGBA[2]);
+							gCvars.Vis_MatLit->AddRef();
+
+							ForceMaterial(gCvars.Vis_MatLit, RGBA);
+							gInts.MdlRender->DrawModelExecute(state, pInfo, pCustomBoneToWorld);
+						}
 					}
 					else
 					{
