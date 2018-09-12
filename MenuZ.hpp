@@ -523,32 +523,18 @@ void CMenu::DrawButtons()
 	y = 58;
 	DrawButton("Bunnyhop", 4, 8, y, gCvars.misc_bunnyhop);
 	DrawButton("Auto Strafe", 4, 8, y += add, gCvars.misc_autostrafe);
-	if (gInts.Engine->GetAppId() != 440)
-	{
-		DrawButton("Time Shift", 4, 8, y += add, gCvars.timeshift_enabled);
+	DrawButton("Time Shift", 4, 8, y += add, gCvars.timeshift_enabled);
 		if (gCvars.timeshift_enabled)
 			DrawSlider("", 4, 12, y += add, 180, 1000, gCvars.timeshift_value);
-		DrawDropdown("TS Key", 4, iWidth - 160, 58, add, key2, 6, gCvars.timeshift_key);
-
-		DrawButton("Server Lagger", 4, 8, y += add, gCvars.misc_serverlag);
+	DrawDropdown("TS Key", 4, iWidth - 160, 58, add, key2, 6, gCvars.timeshift_key);
+	DrawButton("Server Lagger", 4, 8, y += add, gCvars.misc_serverlag);
 		if (gCvars.misc_serverlag)
 			DrawSlider("", 4, 12, y += add, 180, 500, gCvars.misc_serverlag_value);
-		DrawDropdown("SL Key", 4, iWidth - 58, 58, add, key2, 6, gCvars.misc_serverlag_key);
-
-		DrawButton("Anti-Aim", 4, 8, y += add, gCvars.misc_angles);
-
-		DrawDropdown("Pitch", 4, iWidth - 160, 270, add, aax, 4, gCvars.misc_aax);
-		DrawDropdown("Yaw", 4, iWidth - 58, 270, add, aay, 5, gCvars.misc_aay);
-
-	}
-	else if (GAME_TF2)
-	{
-		DrawButton("Bypass Pure", 4, 8, y += add, gCvars.misc_purebypass);
-		DrawButton("Anti-Aim", 4, 8, y += add, gCvars.misc_angles);
-
-		DrawDropdown("Pitch", 4, iWidth - 160, 58, add, aax, 4, gCvars.misc_aax);
-		DrawDropdown("Yaw", 4, iWidth - 58, 58, add, aay, 7, gCvars.misc_aay);
-	}
+	DrawDropdown("SL Key", 4, iWidth - 58, 58, add, key2, 6, gCvars.misc_serverlag_key);
+	DrawButton("Anti-Aim", 4, 8, y += add, gCvars.misc_angles);
+	DrawDropdown("Pitch", 4, iWidth - 160, 270, add, aax, 4, gCvars.misc_aax);
+	DrawDropdown("Yaw", 4, iWidth - 58, 270, add, aay, 5, gCvars.misc_aay);
+	DrawButton("Bypass Pure", 4, 8, y += add, gCvars.misc_purebypass);
 	DrawButton("Announcer", 4, 8, y += add, gCvars.misc_announcer);
 	DrawButton("Backtrack", 4, 8, y += add, gCvars.misc_backtracking);
 	if (gCvars.misc_backtracking)
