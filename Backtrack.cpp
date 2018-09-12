@@ -40,8 +40,7 @@ void CBacktracking::Run(CUserCmd* cmd)
 	if (!pLocal)
 		return;
 
-	if (!gCvars.misc_backtracking)
-		return;
+	if (gCvars.misc_backtracking)
 
 	for (int i = 1; i <= gInts.Engine->GetMaxClients(); i++)
 	{
