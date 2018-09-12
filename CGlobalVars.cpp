@@ -21,6 +21,7 @@ void CGlobalVariables::Save(void)
 		gFileManager.WriteFloat("Aimbot", "Enabled", aimbot_active);
 		gFileManager.WriteFloat("Aimbot", "Key", aimbot_key_enabled);
 		gFileManager.WriteFloat("Aimbot", "Hitscan", aimbot_hitscan);
+		gFileManager.WriteFloat("Aimbot", "Target Priority", aimbot_priority);
 		gFileManager.WriteFloat("Aimbot", "FOV", aimbot_fov);
 		gFileManager.WriteFloat("Aimbot", "Smooth", aimbot_smooth);
 		gFileManager.WriteFloat("Aimbot", "Smooth Amt", aimbot_smooth_amt);
@@ -166,6 +167,7 @@ void CGlobalVariables::Load(void)
 		aimbot_active = gFileManager.ReadFloat("Aimbot", "Enabled", aimbot_active);
 		aimbot_key_enabled = gFileManager.ReadFloat("Aimbot", "Key", aimbot_key_enabled);
 		aimbot_hitscan = gFileManager.ReadFloat("Aimbot", "Hitscan", aimbot_hitscan);
+		aimbot_priority = gFileManager.ReadFloat("Aimbot", "Target Priority", aimbot_priority);
 		aimbot_fov = gFileManager.ReadFloat("Aimbot", "FOV", aimbot_fov);
 		aimbot_smooth = gFileManager.ReadFloat("Aimbot", "Smooth", aimbot_smooth);
 		aimbot_smooth_amt = gFileManager.ReadFloat("Aimbot", "Smooth Amt", aimbot_smooth_amt);
