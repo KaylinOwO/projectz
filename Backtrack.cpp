@@ -63,7 +63,7 @@ void CBacktracking::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 			bestFov = FOVDistance;
 			iBestTarget = i;
 		}
-
+		 
 		if (iBestTarget != -1)
 		{
 			int bestTick = 0;
