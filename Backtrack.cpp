@@ -30,41 +30,32 @@ inline Vector angle_vector(Vector meme)
 }
 //=======================================================================
 
-void CBacktracking::Run(CUserCmd* cmd)
+void CBacktracking::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 {
 	int iBestTarget = -1;
-	float bestFov = 999999;
-	float backtrack_tick = 0;
-	CBaseEntity* pLocal = gInts.EntList->GetClientEntity(me);
+	float bestFov = 99999;
 
-	if (!pLocal)
-		return;
-
-	if (gCvars.misc_backtracking)
-
+	if (!pLocal || !gCvars.misc_backtracking) return;
 	for (int i = 1; i <= gInts.Engine->GetMaxClients(); i++)
 	{
 		CBaseEntity* pEntity = GetBaseEntity(i);
-		CBaseCombatWeapon* pWep = pLocal->GetActiveWeapon();
 
+		if (i = me) continue;
 		if (!pEntity || pEntity->IsDormant() || pEntity->GetLifeState() != LIFE_ALIVE) continue;
-		if (gInts.Engine->GetAppId() == 320 && pEntity->GetTeamNum() == pLocal->GetTeamNum()) continue;
+		if (gCvars.misc_backtracking_deathmatch && pEntity->GetTeamNum() != pLocal->GetTeamNum()) continue;
 		if (pLocal->GetLifeState() != LIFE_ALIVE) continue;
-		if (GAME_TF2) { if (pWep->GetSlot() == 2) continue; }
 
 		Vector hitboxpos = pEntity->GetHitboxPosition(0);
-
-
 		if (GAME_CSS || GAME_DODS)
 			hitboxpos = pEntity->GetHitboxPosition(12);
 		else if (GAME_TF2)
 			hitboxpos = pEntity->GetHitboxPosition(0);
-		else
+		else if (gInts.Engine->GetAppId() != 440)
 			hitboxpos = pEntity->GetHitboxPosition(4);
 
-		headPositions[i][cmd->command_number % 13] = BacktrackData{ cmd->tick_count, hitboxpos };
+		headPositions[i][pCommand->command_number % 13] = BacktrackData{ pCommand->tick_count, hitboxpos };
 
-		Vector ViewDir = angle_vector(cmd->viewangles);
+		Vector ViewDir = angle_vector(pCommand->viewangles);
 		float FOVDistance = distance_point_to_line(hitboxpos, pLocal->GetEyePosition(), ViewDir);
 
 		if (bestFov > FOVDistance)
@@ -76,18 +67,20 @@ void CBacktracking::Run(CUserCmd* cmd)
 		if (iBestTarget != -1)
 		{
 			int bestTick = 0;
-			float tempFOV = 999999;
+			float tempFOV = 9999;
 			float bestFOV = 30;
-			Vector lowestDistTicks(180, 180, 0);
-			bestTick = 12;
-			backtrack_tick = 12;
-
-			if (cmd->buttons & IN_ATTACK)
-				cmd->tick_count = headPositions[i][bestTick].tickcount;
-
-			pEntity->SetupBones(headPositions[i][bestTick].matrix, 128, 256, gInts.globals->curtime);
+			for (int t = 0; t < 13; t++)
+			{
+				Vector ViewDir = angle_vector(pCommand->viewangles);
+				float tempFOV = distance_point_to_line(headPositions[iBestTarget][t].hitboxpos, pLocal->GetEyePosition(), ViewDir);
+				if (bestFOV > tempFOV)
+				{
+					bestTick = t;
+					bestFOV = tempFOV;
+				}
+			}
+			if (pCommand->buttons & IN_ATTACK)
+				pCommand->tick_count = headPositions[i][bestTick].tickcount;
 		}
-
 	}
-
 }

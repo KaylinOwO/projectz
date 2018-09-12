@@ -12,7 +12,7 @@ struct BacktrackData
 class CBacktracking
 {
 public:
-	void Run(CUserCmd* cmd);
+	void Run(CBaseEntity* pLocal, CUserCmd* pCommand);
 
 private:
 
