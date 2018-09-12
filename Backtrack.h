@@ -8,7 +8,7 @@ struct BacktrackData
 	Vector hitboxpos;
 	matrix3x4 matrix[128];
 };
-
+ 
 class CBacktracking
 {
 public:
