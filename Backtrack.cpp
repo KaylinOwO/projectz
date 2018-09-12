@@ -40,7 +40,6 @@ void CBacktracking::Run(CBaseEntity* pLocal, CUserCmd* pCommand)
 	{
 		CBaseEntity* pEntity = GetBaseEntity(i);
 
-		if (i = me) continue;
 		if (!pEntity || pEntity->IsDormant() || pEntity->GetLifeState() != LIFE_ALIVE) continue;
 		if (gCvars.misc_backtracking_deathmatch && pEntity->GetTeamNum() != pLocal->GetTeamNum()) continue;
 		if (pLocal->GetLifeState() != LIFE_ALIVE) continue;
