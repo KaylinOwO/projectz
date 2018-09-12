@@ -100,6 +100,7 @@ void CGlobalVariables::Save(void)
 	gFileManager.WriteFloat("Time Shift", "Enabled", timeshift_enabled);
 		gFileManager.WriteFloat("Time Shift", "Value", timeshift_value);
 
+
 	//
 	// Save Misc
 	//
