@@ -54,6 +54,7 @@ void CBacktracking::Run(CUserCmd* cmd)
 
 		Vector hitboxpos = pEntity->GetHitboxPosition(0);
 
+
 		if (GAME_CSS || GAME_DODS)
 			hitboxpos = pEntity->GetHitboxPosition(12);
 		else if (GAME_TF2)
