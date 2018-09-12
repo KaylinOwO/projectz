@@ -542,7 +542,7 @@ int CAimbot::GetBestTarget(CBaseEntity* pLocal, CUserCmd* pCommand)
 				}
 				if (gCvars.aimbot_waitforcharge) //This isn't the best code but it works for raging.
 				{
-					if (gCvars.aimbot_waitforcharge && ZOOM_BASE_DAMAGE + damage > pEntity->GetHealth())//<
+					if (gCvars.aimbot_waitforcharge && ZOOM_BASE_DAMAGE + damage < pEntity->GetHealth())//<
 						return -1;
 				}
 			}
