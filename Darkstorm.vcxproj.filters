@@ -67,9 +67,6 @@
     <ClCompile Include="Announcer.cpp">
       <Filter>Hacks\Announcer</Filter>
     </ClCompile>
-    <ClCompile Include="AutoDetonate.cpp">
-      <Filter>Hacks\Auto Detonate</Filter>
-    </ClCompile>
     <ClCompile Include="AutoAirblast.cpp">
       <Filter>Hacks\Auto Airblast</Filter>
     </ClCompile>
@@ -186,9 +183,6 @@
     <ClInclude Include="singleton.h">
       <Filter>Hacks\Announcer</Filter>
     </ClInclude>
-    <ClInclude Include="AutoDetonate.h">
-      <Filter>Hacks\Auto Detonate</Filter>
-    </ClInclude>
     <ClInclude Include="AutoAirblast.h">
       <Filter>Hacks\Auto Airblast</Filter>
     </ClInclude>
@@ -229,9 +223,6 @@
     </Filter>
     <Filter Include="Hacks\Announcer">
       <UniqueIdentifier>{e71d8689-6fb3-492c-93ae-43e6e5beded1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Hacks\Auto Detonate">
-      <UniqueIdentifier>{dfd0c91a-c333-4aa6-8402-db17d076ec2a}</UniqueIdentifier>
     </Filter>
     <Filter Include="Hacks\Auto Airblast">
       <UniqueIdentifier>{246cd601-6a38-448e-86fc-f2c7eea98c8d}</UniqueIdentifier>

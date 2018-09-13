@@ -97,7 +97,6 @@
     <ClCompile Include="Aimbot.cpp" />
     <ClCompile Include="Announcer.cpp" />
     <ClCompile Include="AutoAirblast.cpp" />
-    <ClCompile Include="AutoDetonate.cpp" />
     <ClCompile Include="Backtrack.cpp" />
     <ClCompile Include="BaseAPI.cpp" />
     <ClCompile Include="CBaseEntity.cpp" />
@@ -124,7 +123,6 @@
     <ClInclude Include="Aimbot.h" />
     <ClInclude Include="Announcer.h" />
     <ClInclude Include="AutoAirblast.h" />
-    <ClInclude Include="AutoDetonate.h" />
     <ClInclude Include="Backtrack.h" />
     <ClInclude Include="BaseAPI.h" />
     <ClInclude Include="bspflags.h" />
