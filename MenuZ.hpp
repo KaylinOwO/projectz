@@ -526,7 +526,8 @@ void CMenu::DrawButtons()
 	if (gCvars.misc_backtracking)
 		DrawButton("Backtrack Teammates", 4, 12, y += add, gCvars.misc_backtracking_deathmatch);
 	DrawButton("Fastcrouch", 4, 8, y += add, gCvars.misc_fastcrouch);
-	DrawButton("Noisemaker Spam", 4, 8, y += add, gCvars.misc_noisemaker_spam);
+	if (GAME_TF2)
+		DrawButton("Noisemaker Spam", 4, 8, y += add, gCvars.misc_noisemaker_spam);
 	DrawButton("Fakelag", 4, 8, y += add, gCvars.misc_fakelag);
 	if (gCvars.misc_fakelag)
 		DrawSlider("", 4, 12, y += add, 180, 15, gCvars.misc_fakelag_value);
