@@ -121,6 +121,7 @@ public:
 	bool misc_announcer;
 	int misc_configselection = 1;
 	bool misc_novisrecoil;
+	bool misc_noisemaker_spam;
 
 	bool timeshift_switch;
 	bool timeshift_enabled;
