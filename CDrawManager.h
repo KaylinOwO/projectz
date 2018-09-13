@@ -17,6 +17,8 @@ public:
 	void DrawString( int x, int y, Color clrColor, const char *pszText, ... );
 	void DrawStringA(int x, int y, Color color, const char* msg, ...);
 	void DrawStringB(int x, int y, Color color, const char* msg, ...);
+	void DrawStringAG(int x, int y, Color color, const char* msg, ...);
+	void DrawStringBG(int x, int y, Color color, const char* msg, ...);
 	byte GetESPHeight( );
 	void DrawLine(int x0, int y0, int x1, int y1, Color clrColor);
 	void DrawLineEx(int x, int y, int w, int h, Color clrColor);

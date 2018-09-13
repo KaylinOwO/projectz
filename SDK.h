@@ -2015,6 +2015,21 @@ public:
 	}
 };
 
+class ISurfaceGmod
+{
+public:
+	void GetTextSize(unsigned long font, const wchar_t *text, int &wide, int &tall)
+	{
+		typedef void(__thiscall* OriginalFn)(PVOID, unsigned long, const wchar_t *, int&, int&);
+		getvfunc<OriginalFn>(this, 76)(this, font, text, wide, tall);
+	}
+	void GetCursorPosition(int &x, int &y)
+	{
+		typedef void(__thiscall* OriginalFn)(void*, int &, int &);
+		return getvfunc<OriginalFn>(this, 97)(this, x, y);
+	}
+};
+
 class CEntList
 {
 public:
@@ -2544,6 +2559,7 @@ public:
 	EngineClient* Engine;
 	IPanel* Panels;
 	ISurface* Surface;
+	ISurfaceGmod* SurfaceGmod;
 	ClientModeShared* ClientMode;
 	CHLClient* Client;
 	IEngineTrace* EngineTrace;

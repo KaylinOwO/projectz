@@ -95,7 +95,10 @@ void CMenu::Draw(int iMenuWidth, int iMenuHeight, int iSWidth, int iSHeight)
 
 void CMenu::GetMousePos()
 {
-	gInts.Surface->GetCursorPosition(iMouseX, iMouseY);
+	if (GAME_GMOD)
+		gInts.SurfaceGmod->GetCursorPosition(iMouseX, iMouseY);
+	else
+		gInts.Surface->GetCursorPosition(iMouseX, iMouseY);
 }
 
 void CMenu::GetClicked()
@@ -176,16 +179,20 @@ void CMenu::DrawStringM(int iX, int iY, Color colDrawColor, const char* msg, ...
 	int iRealY = ((iScreenHeight / 2) - (iHeight / 2)) + iY;
 
 
-
-	gDrawManager.DrawStringA(iRealX, iRealY, colDrawColor, msg);
+	if (GAME_GMOD)
+		gDrawManager.DrawStringAG(iRealX, iRealY, colDrawColor, msg);
+	else
+		gDrawManager.DrawStringA(iRealX, iRealY, colDrawColor, msg);
 }
 
 void CMenu::DrawStringM2(int iX, int iY, Color colDrawColor, const char* msg)
 {
 	int iRealX = ((iScreenWidth / 2) - (iWidth / 2)) + iX;
 	int iRealY = ((iScreenHeight / 2) - (iHeight / 2)) + iY;
-
-	gDrawManager.DrawStringB(iRealX, iRealY, colDrawColor, msg);
+	if (GAME_GMOD)
+		gDrawManager.DrawStringBG(iRealX, iRealY, colDrawColor, msg);
+	else
+		gDrawManager.DrawStringB(iRealX, iRealY, colDrawColor, msg);
 }
 
 void CMenu::DrawButton(const char* strText, int iTabIndex, int iX, int iY, bool &bVar)
@@ -394,148 +401,191 @@ void CMenu::DrawButtons()
 	int y = 58;
 	int add = 22;
 
-	DrawTab("Aimbot", 1);
-	DrawTab("Triggerbot", 2);
-	DrawTab("Visuals", 3);
-	DrawTab("Misc", 4);
-
-	//
-	// Aimbot
-	//
-	DrawButton("Aimbot", 1, 8, y, gCvars.aimbot_active);
-	DrawDropdown("Target Priority", 1, iWidth - 160, 58, add, tpriority, 2, gCvars.aimbot_priority);
-	DrawDropdown("Method", 1, iWidth - 58, 58, add, method, 2, gCvars.aimbot_mode);
-	DrawButton("Key", 1, 8, y += add, gCvars.aimbot_key_enabled);
-	DrawDropdown("Key", 1, iWidth - 160, 135, add, key, 8, gCvars.aimbot_key);
-	//DrawDropdown("Hands", 3, iWidth - 58, 160, add, hands, 3, gCvars.misc_hands_mode);
-	DrawButton("Hitscan", 1, 8, y += add, gCvars.aimbot_hitscan);
-	DrawSlider("FOV", 1, 8, y += add, 180, 180, gCvars.aimbot_fov);
-	DrawButton("Smoothing", 1, 8, y += add, gCvars.aimbot_smooth);
-	if (gCvars.aimbot_smooth)
-		DrawSlider("", 1, 8, y += add, 180, 180, gCvars.aimbot_smooth_amt);
-	if (GAME_TF2)
+	if (GAME_GMOD) //Gmod createmove doesn't work so just do visual shit
 	{
-		DrawButton("Wait For Charge", 1, 8, y += add, gCvars.aimbot_waitforcharge);
-		DrawButton("Zoomed Only", 1, 8, y += add, gCvars.aimbot_zoomedonly);
-	}
-	DrawButton("Autoshoot", 1, 8, y += add, gCvars.aimbot_autoshoot);
-	DrawButton("Aim at Teammates", 1, 8, y += add, gCvars.aimbot_deathmatch);
-	DrawButton("Aim at Backtrack", 1, 8, y += add, gCvars.aimbot_aimatbacktrack);
-	if (GAME_TF2)
-	{
-		DrawButton("Ignore Cloaked", 1, 8, y += add, gCvars.aimbot_ignorecloaked);
-		DrawButton("Resolver", 1, 8, y += add, gCvars.aimbot_resolver);
-		DrawButton("Projectile Prediction", 1, 8, y += add, gCvars.aimbot_projectile);
-	}
+		DrawTab("Visuals", 1);
 
-	if (GAME_HL2DM)
-		DrawButton("Ignore Health > 100", 1, 8, y += add, gCvars.aimbot_ignoreabove100);
+		//
+		// Visuals
+		//
+		y = 58;
+		DrawButton("Enabled", 1, 8, y, gCvars.esp_active);
+		DrawButton("Enemy Only", 1, 8, y += add, gCvars.esp_enemyonly);
+		DrawButton("Box", 1, 8, y += add, gCvars.esp_box);
+		DrawButton("Bones", 1, 8, y += add, gCvars.esp_bones);
+		DrawButton("Name", 1, 8, y += add, gCvars.esp_name);
+		DrawButton("Health", 1, 8, y += add, gCvars.esp_health);
+		DrawDropdown("Box", 1, iWidth - 58, 58, add, box, 3, gCvars.esp_box_mode);
+		DrawDropdown("Health", 1, iWidth - 160, 58, add, health, 3, gCvars.esp_health_mode);
+		DrawButton("Debug", 1, 8, y += add, gCvars.esp_debug);
+		DrawButton("Thirdperson", 1, 8, y += add, gCvars.misc_thirdperson);
+		DrawButton("No Zoom", 1, 8, y += add, gCvars.misc_nozoom);
+		DrawButton("FOV Override", 1, 8, y += add, gCvars.misc_fovoverride);
+		if (gCvars.misc_fovoverride)
+			DrawSlider("", 1, 12, y += add, 180, 250, gCvars.misc_fov_value);
+		DrawButton("Viewmodel FOV Override", 1, 8, y += add, gCvars.misc_viewmodelfovoverride);
+		if (gCvars.misc_viewmodelfovoverride)
+			DrawSlider("", 1, 12, y += add, 180, 250, gCvars.misc_viewmodelfov_value);
 
-	//
-	// Triggerbot
-	//
-	y = 58;
-	DrawButton("Hitscan Triggerbot", 2, 8, y, gCvars.triggerbot_active);
-	DrawButton("Head Only", 2, 12, y += add, gCvars.triggerbot_headonly);
-	DrawDropdown("Key", 2, iWidth - 160, 58, add, key2, 6, gCvars.triggerbot_key);
-	if (GAME_TF2)
-	{
-		DrawButton("Auto Backstab", 2, 8, y += add, gCvars.triggerbot_autobackstab);
-		DrawButton("Auto Airblast", 2, 8, y += add, gCvars.autoairblast_enabled);
-		DrawButton("Aim at Projectile", 2, 12, y += add, gCvars.autoairblast_rage);
-	}
 
-	//
-	// Visuals
-	//
-	y = 58;
-	DrawButton("Enabled", 3, 8, y, gCvars.esp_active);
-	DrawButton("Enemy Only", 3, 8, y += add, gCvars.esp_enemyonly);
-	if (GAME_TF2)
-	{
-		DrawButton("Draw Enemy Buildings", 3, 8, y += add, gCvars.esp_objects);
-		DrawButton("Dont Draw Cloaked", 3, 8, y += add, gCvars.esp_ignorecloaked);
-	}
-	DrawButton("Box", 3, 8, y += add, gCvars.esp_box);
-	DrawButton("Bones", 3, 8, y += add, gCvars.esp_bones);
-	DrawButton("Name", 3, 8, y += add, gCvars.esp_name);
-	DrawButton("Health", 3, 8, y += add, gCvars.esp_health);
-	if (GAME_TF2)
-	{
-		ConVar* mat_dxlevel = gInts.cvar->FindVar("mat_dxlevel");
-		if (mat_dxlevel->GetInt() > 90)
-			DrawButton("Glow", 3, 8, y += add, gCvars.esp_glow);
-		DrawButton("Chams", 3, 8, y += add, gCvars.esp_chams);
-		DrawDropdown("Chams", 3, iWidth - 58, 58, add, chams , 2, gCvars.esp_chams_mode);
-		DrawButton("Hands", 3, 8, y += add, gCvars.misc_hands);
-		DrawDropdown("Hands", 3, iWidth - 58, 160, add, hands, 3, gCvars.misc_hands_mode);
-		DrawDropdown("Box", 3, iWidth - 160, 58, add, box, 3, gCvars.esp_box_mode);
-		DrawDropdown("Health", 3, iWidth - 160, 160, add, health, 3, gCvars.esp_health_mode);
+		DrawSlider("RED Red", 1, 8, y += add, 180, 255, gCvars.color_r_red);
+		DrawSlider("RED Green", 1, 8, y += add, 180, 255, gCvars.color_g_red);
+		DrawSlider("RED Blue", 1, 8, y += add, 180, 255, gCvars.color_b_red);
 
+		DrawSlider("BLU Red", 1, 8, y += add, 180, 255, gCvars.color_r_blu);
+		DrawSlider("BLU Green", 1, 8, y += add, 180, 255, gCvars.color_g_blu);
+		DrawSlider("BLU Blue", 1, 8, y += add, 180, 255, gCvars.color_b_blu);
+
+		DrawSlider("Other Red", 1, 8, y += add, 180, 255, gCvars.color_r_other);
+		DrawSlider("Other Green", 1, 8, y += add, 180, 255, gCvars.color_g_other);
+		DrawSlider("Other Blue", 1, 8, y += add, 180, 255, gCvars.color_b_other);
+		ResetColors("Reset Colors", 1, 8, y += add);
 	}
 	else
 	{
-		DrawDropdown("Box", 3, iWidth - 58, 58, add, box, 3, gCvars.esp_box_mode);
-		DrawDropdown("Health", 3, iWidth - 160, 58, add, health, 3, gCvars.esp_health_mode);
-	}
-	DrawButton("Debug", 3, 8, y += add, gCvars.esp_debug);
-	DrawButton("Thirdperson", 3, 8, y += add, gCvars.misc_thirdperson);
-	if (GAME_TF2)
-	{
-		DrawButton("No Hats", 3, 8, y += add, gCvars.misc_nohats);
-		DrawButton("No Scope", 3, 8, y += add, gCvars.misc_noscope);
-	}
-	DrawButton("No Zoom", 3, 8, y += add, gCvars.misc_nozoom);
-	DrawButton("FOV Override", 3, 8, y += add, gCvars.misc_fovoverride);
-	if (gCvars.misc_fovoverride)
-		DrawSlider("", 3, 12, y += add, 180, 250, gCvars.misc_fov_value);
-	DrawButton("Viewmodel FOV Override", 3, 8, y += add, gCvars.misc_viewmodelfovoverride);
-	if (gCvars.misc_viewmodelfovoverride)
-		DrawSlider("", 3, 12, y += add, 180, 250, gCvars.misc_viewmodelfov_value);
+		DrawTab("Aimbot", 1);
+		DrawTab("Triggerbot", 2);
+		DrawTab("Visuals", 3);
+		DrawTab("Misc", 4);
+
+		//
+		// Aimbot
+		//
+		DrawButton("Aimbot", 1, 8, y, gCvars.aimbot_active);
+		DrawDropdown("Target Priority", 1, iWidth - 160, 58, add, tpriority, 2, gCvars.aimbot_priority);
+		DrawDropdown("Method", 1, iWidth - 58, 58, add, method, 2, gCvars.aimbot_mode);
+		DrawButton("Key", 1, 8, y += add, gCvars.aimbot_key_enabled);
+		DrawDropdown("Key", 1, iWidth - 160, 135, add, key, 8, gCvars.aimbot_key);
+		//DrawDropdown("Hands", 3, iWidth - 58, 160, add, hands, 3, gCvars.misc_hands_mode);
+		DrawButton("Hitscan", 1, 8, y += add, gCvars.aimbot_hitscan);
+		DrawSlider("FOV", 1, 8, y += add, 180, 180, gCvars.aimbot_fov);
+		DrawButton("Smoothing", 1, 8, y += add, gCvars.aimbot_smooth);
+		if (gCvars.aimbot_smooth)
+			DrawSlider("", 1, 8, y += add, 180, 180, gCvars.aimbot_smooth_amt);
+		if (GAME_TF2)
+		{
+			DrawButton("Wait For Charge", 1, 8, y += add, gCvars.aimbot_waitforcharge);
+			DrawButton("Zoomed Only", 1, 8, y += add, gCvars.aimbot_zoomedonly);
+		}
+		DrawButton("Autoshoot", 1, 8, y += add, gCvars.aimbot_autoshoot);
+		DrawButton("Aim at Teammates", 1, 8, y += add, gCvars.aimbot_deathmatch);
+		DrawButton("Aim at Backtrack", 1, 8, y += add, gCvars.aimbot_aimatbacktrack);
+		if (GAME_TF2)
+		{
+			DrawButton("Ignore Cloaked", 1, 8, y += add, gCvars.aimbot_ignorecloaked);
+			DrawButton("Resolver", 1, 8, y += add, gCvars.aimbot_resolver);
+			DrawButton("Projectile Prediction", 1, 8, y += add, gCvars.aimbot_projectile);
+		}
+
+		if (GAME_HL2DM)
+			DrawButton("Ignore Health > 100", 1, 8, y += add, gCvars.aimbot_ignoreabove100);
+
+		//
+		// Triggerbot
+		//
+		y = 58;
+		DrawButton("Hitscan Triggerbot", 2, 8, y, gCvars.triggerbot_active);
+		DrawButton("Head Only", 2, 12, y += add, gCvars.triggerbot_headonly);
+		DrawDropdown("Key", 2, iWidth - 160, 58, add, key2, 6, gCvars.triggerbot_key);
+		if (GAME_TF2)
+		{
+			DrawButton("Auto Backstab", 2, 8, y += add, gCvars.triggerbot_autobackstab);
+			DrawButton("Auto Airblast", 2, 8, y += add, gCvars.autoairblast_enabled);
+			DrawButton("Aim at Projectile", 2, 12, y += add, gCvars.autoairblast_rage);
+		}
+
+		//
+		// Visuals
+		//
+		y = 58;
+		DrawButton("Enabled", 3, 8, y, gCvars.esp_active);
+		DrawButton("Enemy Only", 3, 8, y += add, gCvars.esp_enemyonly);
+		if (GAME_TF2)
+		{
+			DrawButton("Draw Enemy Buildings", 3, 8, y += add, gCvars.esp_objects);
+			DrawButton("Dont Draw Cloaked", 3, 8, y += add, gCvars.esp_ignorecloaked);
+		}
+		DrawButton("Box", 3, 8, y += add, gCvars.esp_box);
+		DrawButton("Bones", 3, 8, y += add, gCvars.esp_bones);
+		DrawButton("Name", 3, 8, y += add, gCvars.esp_name);
+		DrawButton("Health", 3, 8, y += add, gCvars.esp_health);
+		if (GAME_TF2)
+		{
+			ConVar* mat_dxlevel = gInts.cvar->FindVar("mat_dxlevel");
+			if (mat_dxlevel->GetInt() > 90)
+				DrawButton("Glow", 3, 8, y += add, gCvars.esp_glow);
+			DrawButton("Chams", 3, 8, y += add, gCvars.esp_chams);
+			DrawDropdown("Chams", 3, iWidth - 58, 58, add, chams, 2, gCvars.esp_chams_mode);
+			DrawButton("Hands", 3, 8, y += add, gCvars.misc_hands);
+			DrawDropdown("Hands", 3, iWidth - 58, 160, add, hands, 3, gCvars.misc_hands_mode);
+			DrawDropdown("Box", 3, iWidth - 160, 58, add, box, 3, gCvars.esp_box_mode);
+			DrawDropdown("Health", 3, iWidth - 160, 160, add, health, 3, gCvars.esp_health_mode);
+
+		}
+		else
+		{
+			DrawDropdown("Box", 3, iWidth - 58, 58, add, box, 3, gCvars.esp_box_mode);
+			DrawDropdown("Health", 3, iWidth - 160, 58, add, health, 3, gCvars.esp_health_mode);
+		}
+		DrawButton("Debug", 3, 8, y += add, gCvars.esp_debug);
+		DrawButton("Thirdperson", 3, 8, y += add, gCvars.misc_thirdperson);
+		if (GAME_TF2)
+		{
+			DrawButton("No Hats", 3, 8, y += add, gCvars.misc_nohats);
+			DrawButton("No Scope", 3, 8, y += add, gCvars.misc_noscope);
+		}
+		DrawButton("No Zoom", 3, 8, y += add, gCvars.misc_nozoom);
+		DrawButton("FOV Override", 3, 8, y += add, gCvars.misc_fovoverride);
+		if (gCvars.misc_fovoverride)
+			DrawSlider("", 3, 12, y += add, 180, 250, gCvars.misc_fov_value);
+		DrawButton("Viewmodel FOV Override", 3, 8, y += add, gCvars.misc_viewmodelfovoverride);
+		if (gCvars.misc_viewmodelfovoverride)
+			DrawSlider("", 3, 12, y += add, 180, 250, gCvars.misc_viewmodelfov_value);
 
 
-	DrawSlider("RED Red", 3, 8, y += add, 180, 255, gCvars.color_r_red);
-	DrawSlider("RED Green", 3, 8, y += add, 180, 255, gCvars.color_g_red);
-	DrawSlider("RED Blue", 3, 8, y += add, 180, 255, gCvars.color_b_red);
+		DrawSlider("RED Red", 3, 8, y += add, 180, 255, gCvars.color_r_red);
+		DrawSlider("RED Green", 3, 8, y += add, 180, 255, gCvars.color_g_red);
+		DrawSlider("RED Blue", 3, 8, y += add, 180, 255, gCvars.color_b_red);
 
-	DrawSlider("BLU Red", 3, 8, y += add, 180, 255, gCvars.color_r_blu);
-	DrawSlider("BLU Green", 3, 8, y += add, 180, 255, gCvars.color_g_blu);
-	DrawSlider("BLU Blue", 3, 8, y += add, 180, 255, gCvars.color_b_blu);
+		DrawSlider("BLU Red", 3, 8, y += add, 180, 255, gCvars.color_r_blu);
+		DrawSlider("BLU Green", 3, 8, y += add, 180, 255, gCvars.color_g_blu);
+		DrawSlider("BLU Blue", 3, 8, y += add, 180, 255, gCvars.color_b_blu);
 
-	DrawSlider("Other Red", 3, 8, y += add, 180, 255, gCvars.color_r_other);
-	DrawSlider("Other Green", 3, 8, y += add, 180, 255, gCvars.color_g_other);
-	DrawSlider("Other Blue", 3, 8, y += add, 180, 255, gCvars.color_b_other);
-	ResetColors("Reset Colors", 3, 8, y += add);
+		DrawSlider("Other Red", 3, 8, y += add, 180, 255, gCvars.color_r_other);
+		DrawSlider("Other Green", 3, 8, y += add, 180, 255, gCvars.color_g_other);
+		DrawSlider("Other Blue", 3, 8, y += add, 180, 255, gCvars.color_b_other);
+		ResetColors("Reset Colors", 3, 8, y += add);
 
-	//
-	// Misc
-	//
-	y = 58;
-	DrawButton("Bunnyhop", 4, 8, y, gCvars.misc_bunnyhop);
-	DrawButton("Auto Strafe", 4, 8, y += add, gCvars.misc_autostrafe);
-	DrawButton("Time Shift", 4, 8, y += add, gCvars.timeshift_enabled);
+		//
+		// Misc
+		//
+		y = 58;
+		DrawButton("Bunnyhop", 4, 8, y, gCvars.misc_bunnyhop);
+		DrawButton("Auto Strafe", 4, 8, y += add, gCvars.misc_autostrafe);
+		DrawButton("Time Shift", 4, 8, y += add, gCvars.timeshift_enabled);
 		if (gCvars.timeshift_enabled)
 			DrawSlider("", 4, 12, y += add, 180, 1000, gCvars.timeshift_value);
-	DrawDropdown("TS Key", 4, iWidth - 160, 58, add, key2, 6, gCvars.timeshift_key);
-	DrawButton("Server Lagger", 4, 8, y += add, gCvars.misc_serverlag);
+		DrawDropdown("TS Key", 4, iWidth - 160, 58, add, key2, 6, gCvars.timeshift_key);
+		DrawButton("Server Lagger", 4, 8, y += add, gCvars.misc_serverlag);
 		if (gCvars.misc_serverlag)
 			DrawSlider("", 4, 12, y += add, 180, 500, gCvars.misc_serverlag_value);
-	DrawDropdown("SL Key", 4, iWidth - 58, 58, add, key2, 6, gCvars.misc_serverlag_key);
-	DrawButton("Anti-Aim", 4, 8, y += add, gCvars.misc_angles);
-	DrawDropdown("Pitch", 4, iWidth - 160, 270, add, aax, 4, gCvars.misc_aax);
-	DrawDropdown("Yaw", 4, iWidth - 58, 270, add, aay, 5, gCvars.misc_aay);
-	DrawButton("Bypass Pure", 4, 8, y += add, gCvars.misc_purebypass);
-	DrawButton("Announcer", 4, 8, y += add, gCvars.misc_announcer);
-	DrawButton("Backtrack", 4, 8, y += add, gCvars.misc_backtracking);
-	if (gCvars.misc_backtracking)
-		DrawButton("Backtrack Teammates", 4, 12, y += add, gCvars.misc_backtracking_deathmatch);
-	DrawButton("Fastcrouch", 4, 8, y += add, gCvars.misc_fastcrouch);
-	DrawButton("Fakelag", 4, 8, y += add, gCvars.misc_fakelag);
-	if (gCvars.misc_fakelag)
-		DrawSlider("", 4, 12, y += add, 180, 15, gCvars.misc_fakelag_value);
+		DrawDropdown("SL Key", 4, iWidth - 58, 58, add, key2, 6, gCvars.misc_serverlag_key);
+		DrawButton("Anti-Aim", 4, 8, y += add, gCvars.misc_angles);
+		DrawDropdown("Pitch", 4, iWidth - 160, 270, add, aax, 4, gCvars.misc_aax);
+		DrawDropdown("Yaw", 4, iWidth - 58, 270, add, aay, 5, gCvars.misc_aay);
+		DrawButton("Bypass Pure", 4, 8, y += add, gCvars.misc_purebypass);
+		DrawButton("Announcer", 4, 8, y += add, gCvars.misc_announcer);
+		DrawButton("Backtrack", 4, 8, y += add, gCvars.misc_backtracking);
+		if (gCvars.misc_backtracking)
+			DrawButton("Backtrack Teammates", 4, 12, y += add, gCvars.misc_backtracking_deathmatch);
+		DrawButton("Fastcrouch", 4, 8, y += add, gCvars.misc_fastcrouch);
+		DrawButton("Fakelag", 4, 8, y += add, gCvars.misc_fakelag);
+		if (gCvars.misc_fakelag)
+			DrawSlider("", 4, 12, y += add, 180, 15, gCvars.misc_fakelag_value);
 
-	SaveButton("Save Configuration", 4, 20, y += 300);
-	LoadButton("Load Configuration", 4, 20, y += 25);
+		SaveButton("Save Configuration", 4, 20, y += 300);
+		LoadButton("Load Configuration", 4, 20, y += 25);
+	}
 }
 
 
