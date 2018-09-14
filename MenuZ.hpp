@@ -434,6 +434,8 @@ void CMenu::DrawButtons()
 	y = 58;
 	DrawButton("Hitscan Triggerbot", 2, 8, y, gCvars.triggerbot_active);
 	DrawButton("Head Only", 2, 12, y += add, gCvars.triggerbot_headonly);
+	if (GAME_TF2)
+		DrawButton("Ignore Cloaked", 2, 12, y += add, gCvars.triggerbot_ignorecloaked);
 	DrawDropdown("Key", 2, iWidth - 160, 58, add, key2, 6, gCvars.triggerbot_key);
 	if (GAME_TF2)
 	{
