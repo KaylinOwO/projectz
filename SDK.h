@@ -24,10 +24,26 @@
 #include "Vector2D.h"
 #include "xor.h"
 
+//Including the Steam API Files
+#include "steam/ISteamClient017.h"
+#include "steam/ISteamFriends002.h"
+#include "steam/ISteamUser017.h"
+
 using namespace std;
 
 typedef void* ( __cdecl* CreateInterface_t )( const char*, int* );
 typedef void* (*CreateInterfaceFn)(const char *pName, int *pReturnCode);
+typedef void *FileHandle_t;
+typedef __int16 int16;
+typedef unsigned __int16 uint16;
+typedef __int32 int32;
+typedef unsigned __int32 uint32;
+typedef __int64 int64;
+typedef unsigned __int64 uint64;
+typedef float matrix3x4[3][4];
+typedef int ModelInstanceHandle_t;
+typedef CGameTrace trace_t;
+typedef uint64 VertexFormat_t;
 
 #define VMTManager toolkit::VMTManager
 #define VMTBaseManager toolkit::VMTBaseManager
@@ -93,26 +109,13 @@ typedef void* (*CreateInterfaceFn)(const char *pName, int *pReturnCode);
 #define RADPI 57.295779513082f
 #define SQUARE( a ) a*a
 
-typedef __int16 int16;
-typedef unsigned __int16 uint16;
-typedef __int32 int32;
-typedef unsigned __int32 uint32;
-typedef __int64 int64;
-typedef unsigned __int64 uint64;
-
-typedef float matrix3x4[3][4];
-
-typedef int ModelInstanceHandle_t;
-
 class CUtil;
 class CNetVars;
 class CGameTrace;
-typedef CGameTrace trace_t;
 
 class CBaseCombatWeapon;
 
 class IMaterialVar;
-typedef uint64 VertexFormat_t;
 class IMesh;
 class IVertexBuffer;
 class IIndexBuffer;
@@ -146,6 +149,7 @@ struct WorldListInfo_t;
 class IWorldRenderList;
 class IBrushRenderer;
 class IClientRenderable;
+class IHandleEntity;
 
 class IMaterialProxyFactory;
 class ITexture;
@@ -162,8 +166,7 @@ class CShadowMgr;
 #define FLOW_INCOMING 1
 #define BLU_TEAM 3
 #define RED_TEAM 2
-
-
+#define UPDATEACCURACYPENALTYOFFSET 0x5E
 
 typedef struct player_info_s
 {
@@ -262,9 +265,6 @@ enum ClientFrameStage_t
 	FRAME_RENDER_END
 };
 
-
-
-
 enum tf_classes
 {
 	TF2_Scout = 1,
@@ -285,10 +285,10 @@ enum tf_cond
 	TFCond_Disguising = (1 << 2), //Toggled when a Spy is disguising.  
 	TFCond_Disguised = (1 << 3), //Toggled when a Spy is disguised. 
 	TFCond_Cloaked = (1 << 4), //Toggled when a Spy is invisible. 
-	TFCond_Ubercharged = (1 << 5), //Toggled when a player is ÜberCharged. 
+	TFCond_Ubercharged = (1 << 5), //Toggled when a player is ÃœberCharged. 
 	TFCond_TeleportedGlow = (1 << 6), //Toggled when someone leaves a teleporter and has glow beneath their feet. 
 	TFCond_Taunting = (1 << 7), //Toggled when a player is taunting. 
-	TFCond_UberchargeFading = (1 << 8), //Toggled when the ÜberCharge is fading. 
+	TFCond_UberchargeFading = (1 << 8), //Toggled when the ÃœberCharge is fading. 
 	TFCond_CloakFlicker = (1 << 9), //Toggled when a Spy is visible during cloak. 
 	TFCond_Teleporting = (1 << 10), //Only activates for a brief second when the player is being teleported; not very useful. 
 	TFCond_Kritzkrieged = (1 << 11), //Toggled when a player is being crit buffed by the KritzKrieg. 
@@ -333,7 +333,7 @@ enum tf_cond
 	TFCondEx_DisguisedAsDispenser = (1 << 17), //Bot is disguised as dispenser.
 	TFCondEx_Sapped = (1 << 18), //MvM bot is being sapped.
 	TFCondEx_UberchargedHidden = (1 << 19), //MvM Related
-	TFCondEx_UberchargedCanteen = (1 << 20), //Player is receiving ÜberCharge from a canteen.
+	TFCondEx_UberchargedCanteen = (1 << 20), //Player is receiving ÃœberCharge from a canteen.
 	TFCondEx_HalloweenBombHead = (1 << 21), //Player has a bomb on their head from Merasmus.
 	TFCondEx_HalloweenThriller = (1 << 22), //Players are forced to dance from Merasmus.
 	TFCondEx_BulletCharge = (1 << 26), //Player is receiving 75% reduced damage from bullets.
@@ -566,24 +566,12 @@ public:
 
 	// Apply constant color or alpha modulation
 	virtual void AlphaModulate(float alpha) = 0;
-	/*
-	void AlphaModulate(float alpha)
-	{
-	typedef void(__thiscall *OriginalFn)(void*, float);
-	return getvfunc< OriginalFn >(this, 30)(this, alpha);
-	}
-	*/
+
 	virtual void ColorModulate(float r, float g, float b) = 0;
 
 	// Material Var flags...
 	virtual void SetMaterialVarFlag(MaterialVarFlags_t flag, bool on) = 0;
-	/*
-	void SetMaterialVarFlag(MaterialVarFlags_t flag, bool on)
-	{
-	typedef void(__thiscall *OriginalFn)(void*, MaterialVarFlags_t, bool);
-	return getvfunc< OriginalFn >(this, 31)(this, flag, on);
-	}
-	*/
+
 	virtual bool GetMaterialVarFlag(MaterialVarFlags_t flag) = 0;
 
 	// Gets material reflectivity
@@ -838,9 +826,8 @@ public:
 	Vector GetEyePosition(); //yeah i know its actually view offset, but nobody will notice since you guys are just here to paste
 	Vector GetAbsEyePosition(); //Without origin added, although you could just subtract origin, tbh idk why i have this
 	Vector GetHitboxPosition(int iHitbox);
-	//float GetNextAttack();
 };
-#define UPDATEACCURACYPENALTYOFFSET 0x5E8 //Copied from iwebz 2015
+
 class CBaseCombatWeapon : public CBaseEntity
 {
 public:
@@ -848,12 +835,6 @@ public:
 	{
 		typedef int(__thiscall * OriginalFn)(PVOID);
 		return getvfunc<OriginalFn>(this, 318)(this);
-	}
-
-	void UpdateAccuracyPenalty() //CS:S Only
-	{
-		typedef void(__thiscall *UpdateAccuracyPenalty_t)(PVOID);
-		((UpdateAccuracyPenalty_t)(*(PDWORD)(*(PDWORD)(this) + UPDATEACCURACYPENALTYOFFSET)))(this);
 	}
 
 	float get_next_attack()
@@ -865,9 +846,7 @@ public:
 	{
 		return *(int*)(this + gNetVars.get_offset("DT_BaseCombatWeapon", "LocalWeaponData", "m_iClip1"));
 	}
-
 	
-
 	int GetMaxClip2()
 	{
 		typedef int(__thiscall * OriginalFn)(PVOID);
@@ -1556,6 +1535,7 @@ public:
 
 	virtual float		GetTimeoutSeconds() const = 0;
 };
+
 class INetChannel : public INetChannelInfo
 {
 public:
@@ -1626,6 +1606,7 @@ public:
 
 	virtual int GetProtocolVersion() = 0;
 };
+
 class INetChannelHandler
 {
 public:
@@ -1651,7 +1632,7 @@ public:
 
 	virtual void FileSent(const char *fileName, unsigned int transferID) = 0; // we sent a file
 };
-typedef void *FileHandle_t;
+
 class INetMessage
 {
 public:
@@ -2213,8 +2194,6 @@ enum TraceType_t
 	TRACE_EVERYTHING_FILTER_PROPS,	// NOTE: This version will pass the IHandleEntity for props through the filter, unlike all other filters
 };
 
-class IHandleEntity;
-
 class ITraceFilter
 {
 public:
@@ -2404,7 +2383,7 @@ public:
 
 	// Draw lights
 	virtual void DrawLights(void) = 0;
-	// FIXME:  This function is a stub, doesn't do anything in the engine right now
+
 	virtual void DrawMaskEntities(void) = 0;
 
 	// Draw surfaces with alpha, don't call in shadow depth pass
@@ -2526,10 +2505,6 @@ enum playercontrols
 	IN_BULLRUSH = (1 << 22),
 };
 
-
-
-
-
 class ClientModeShared
 {
 public:
@@ -2545,12 +2520,6 @@ public:
 	}
 };
 
-#include "steam/ISteamClient017.h"
-#include "steam/ISteamFriends002.h"
-#include "steam/ISteamUser017.h"
-//#include "ISteamClient017.h"
-//#include "ISteamFriends002.h"
-// "ISteamUser017.h"
 class CInterfaces
 {
 public:
