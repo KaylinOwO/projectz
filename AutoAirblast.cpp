@@ -13,104 +13,57 @@ bool ShouldReflect(CBaseEntity *ent, int lTeamNum, const char* name);
 
 void CAutoAirblast::Run(CBaseEntity* g_pLocalPlayer, CUserCmd* g_pUserCmd)
 {
-	// Check if user settings allow Auto Reflect
 	if (!gCvars.autoairblast_enabled)
 		return;
-
 	if (g_pLocalPlayer->GetLifeState() != LIFE_ALIVE)
 		return;
-
 	if (g_pLocalPlayer->GetClassNum() != TF2_Pyro)
 		return;
-
 	if (g_pLocalPlayer->GetActiveWeapon()->GetSlot() != 0)
 		return;
-
 	int iClassID = g_pLocalPlayer->GetActiveWeapon()->GetClientClass()->iClassID;
-
-	// Check for phlogistinator, which is item 594
 	if (iClassID == phlogID)
 		return;
-
 	Vector m_vOldViewAngle = g_pUserCmd->viewangles;
 	float m_fOldSideMove = g_pUserCmd->sidemove;
 	float m_fOldForwardMove = g_pUserCmd->forwardmove;
-
-	// If user settings allow, return if local player is in attack
-	//if (idle_only && (g_pUserCmd->buttons & IN_ATTACK))
-	//	return;
-
-	// Create some book-keeping vars
 	float closest_dist = 0.0f;
 	Vector closest_vec;
-	// Loop to find the closest entity
 	for (int i = 0; i < gInts.EntList->GetHighestEntityIndex(); i++)
 	{
-
-		// Find an ent from the for loops current tick
 		CBaseEntity *ent = gInts.EntList->GetClientEntity(i);
-
-		// Check if null or dormant
 		if (!ent)
 			continue;
-
 		if (ent->IsDormant())
 			continue;
-
 		if (ent->GetTeamNum() == g_pLocalPlayer->GetTeamNum())
 			continue;
-
-		// Check if ent should be reflected
 		if (!ShouldReflect(ent, g_pLocalPlayer->GetTeamNum(), ent->GetClientClass()->chName))
 			continue;
-
 		auto net = reinterpret_cast<INetChannelInfo*>(gInts.Engine->GetNetChannelInfo());
-
 		float lInterp = gInts.cvar->FindVar("cl_interp_ratio")->GetFloat() / gInts.cvar->FindVar("cl_updaterate")->GetFloat() * gInts.globals->interval_per_tick;
 		float latency = net->GetLatency(FLOW_OUTGOING) + net->GetLatency(FLOW_INCOMING);
 		float scale = lInterp + latency;
-
-		// Create a vector variable to store our velocity
 		Vector velocity;
-		// Grab Velocity of projectile
 		velocity = EstimateAbsVelocity(ent);
-		// Predict a vector for where the projectile will be
 		Vector predicted_proj = ent->GetAbsOrigin() +(velocity * latency);
 		;
-
-		  // Calculate distance
 		float dist = predicted_proj.DistToSqr(g_pLocalPlayer->GetAbsOrigin());
-
-		// Compare our info to the others and determine if its the best, if we
-		// dont have a projectile already, then we save it here
 		if (dist < closest_dist || closest_dist == 0.0f)
 		{
 			closest_dist = dist;
 			closest_vec = predicted_proj;
 		}
 	}
-
-	// Determine whether the closest projectile is whithin our parameters,
-	// preferably 185 units should be our limit, sqr is around the number below
 	if (closest_dist == 0 || closest_dist > 34400)
 		return;
-
 	Vector previousAngles = g_pUserCmd->viewangles;
-
 	if (gCvars.autoairblast_rage)
 	{
 		AimAt(g_pLocalPlayer->GetEyePosition(), closest_vec, g_pUserCmd, true);
 	}
-
-	// Airblast
 	g_pUserCmd->buttons |= IN_ATTACK2;
-
-	//if (!gCvars.autoairblast_silent)
-	//	g_pUserCmd->viewangles = previousAngles;
-
-	Util->FixMove(g_pUserCmd, m_vOldViewAngle, m_fOldForwardMove, m_fOldSideMove); //Fixes movement for silent aim
-
-	// Function is finished, return
+	Util->FixMove(g_pUserCmd, m_vOldViewAngle, m_fOldForwardMove, m_fOldSideMove);
 	return;
 }
 
