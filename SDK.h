@@ -31,20 +31,6 @@
 
 using namespace std;
 
-typedef void* ( __cdecl* CreateInterface_t )( const char*, int* );
-typedef void* (*CreateInterfaceFn)(const char *pName, int *pReturnCode);
-typedef void *FileHandle_t;
-typedef __int16 int16;
-typedef unsigned __int16 uint16;
-typedef __int32 int32;
-typedef unsigned __int32 uint32;
-typedef __int64 int64;
-typedef unsigned __int64 uint64;
-typedef float matrix3x4[3][4];
-typedef int ModelInstanceHandle_t;
-typedef CGameTrace trace_t;
-typedef uint64 VertexFormat_t;
-
 #define VMTManager toolkit::VMTManager
 #define VMTBaseManager toolkit::VMTBaseManager
 
@@ -155,6 +141,20 @@ class IMaterialProxyFactory;
 class ITexture;
 class IMaterialSystemHardwareConfig;
 class CShadowMgr;
+
+typedef void* (__cdecl* CreateInterface_t)(const char*, int*);
+typedef void* (*CreateInterfaceFn)(const char *pName, int *pReturnCode);
+typedef void *FileHandle_t;
+typedef __int16 int16;
+typedef unsigned __int16 uint16;
+typedef __int32 int32;
+typedef unsigned __int32 uint32;
+typedef __int64 int64;
+typedef unsigned __int64 uint64;
+typedef float matrix3x4[3][4];
+typedef int ModelInstanceHandle_t;
+typedef CGameTrace trace_t;
+typedef uint64 VertexFormat_t;
 
 #define me gInts.Engine->GetLocalPlayer()
 #define GetBaseEntity gInts.EntList->GetClientEntity
