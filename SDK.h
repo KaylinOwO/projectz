@@ -2527,7 +2527,6 @@ public:
 	EngineClient* Engine;
 	IPanel* Panels;
 	ISurface* Surface;
-	ISurfaceGmod* SurfaceGmod;
 	ClientModeShared* ClientMode;
 	CHLClient* Client;
 	IEngineTrace* EngineTrace;
