@@ -100,11 +100,22 @@ void CDrawManager::DrawStringA(int x, int y, Color color, const char* msg, ...)
 
 	int Wid, Hit;
 	
-	gInts.Surface->GetTextSize(m_Font, wbuf, Wid, Hit);
-	gInts.Surface->DrawSetTextFont(m_Font);
-	gInts.Surface->DrawSetTextColor(color.r(), color.g(), color.b(), color.a());
-	gInts.Surface->DrawSetTextPos(x - Wid / 2, y - Hit / 2);
-	gInts.Surface->DrawPrintText(wbuf, wcslen(wbuf));
+	if (GAME_GMOD)
+	{
+		gInts.Surface->GetTextSizegmod(m_Font, wbuf, Wid, Hit);
+		gInts.Surface->DrawSetTextFont(m_Font);
+		gInts.Surface->DrawSetTextColor(color.r(), color.g(), color.b(), color.a());
+		gInts.Surface->DrawSetTextPos(x - Wid / 2, y - Hit / 2);
+		gInts.Surface->DrawPrintText(wbuf, wcslen(wbuf));
+	}
+	else
+	{
+		gInts.Surface->GetTextSize(m_Font, wbuf, Wid, Hit);
+		gInts.Surface->DrawSetTextFont(m_Font);
+		gInts.Surface->DrawSetTextColor(color.r(), color.g(), color.b(), color.a());
+		gInts.Surface->DrawSetTextPos(x - Wid / 2, y - Hit / 2);
+		gInts.Surface->DrawPrintText(wbuf, wcslen(wbuf));
+	}
 }
 
 
@@ -120,11 +131,22 @@ void CDrawManager::DrawStringB(int x, int y, Color color, const char* msg, ...)
 
 	int Wid, Hit;
 
-	gInts.Surface->GetTextSize(m_Font, wbuf, Wid, Hit);
-	gInts.Surface->DrawSetTextFont(m_Font);
-	gInts.Surface->DrawSetTextColor(color.r(), color.g(), color.b(), color.a());
-	gInts.Surface->DrawSetTextPos(x, y - Hit / 2);
-	gInts.Surface->DrawPrintText(wbuf, wcslen(wbuf));
+	if (GAME_GMOD)
+	{
+		gInts.Surface->GetTextSizegmod(m_Font, wbuf, Wid, Hit);
+		gInts.Surface->DrawSetTextFont(m_Font);
+		gInts.Surface->DrawSetTextColor(color.r(), color.g(), color.b(), color.a());
+		gInts.Surface->DrawSetTextPos(x, y - Hit / 2);
+		gInts.Surface->DrawPrintText(wbuf, wcslen(wbuf));
+	}
+	else
+	{
+		gInts.Surface->GetTextSize(m_Font, wbuf, Wid, Hit);
+		gInts.Surface->DrawSetTextFont(m_Font);
+		gInts.Surface->DrawSetTextColor(color.r(), color.g(), color.b(), color.a());
+		gInts.Surface->DrawSetTextPos(x, y - Hit / 2);
+		gInts.Surface->DrawPrintText(wbuf, wcslen(wbuf));
+	}
 }
 
 //===================================================================================
