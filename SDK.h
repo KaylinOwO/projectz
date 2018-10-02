@@ -228,7 +228,7 @@ public:
 class CUserCmd
 {
 public:
-	virtual ~CUserCmd() {}; //Destructor 0
+	virtual ~CUserCmd() {}; //comment this line to add gmod support
 	int command_number; //4
 	int tick_count; //8
 	Vector viewangles; //C
@@ -243,6 +243,8 @@ public:
 	short mousedx; //38
 	short mousedy; //3A
 	bool hasbeenpredicted; //3C;
+	
+	//char pad[264]; //uncomment this line to add gmod support
 };
 
 enum ClientFrameStage_t
@@ -1954,6 +1956,18 @@ public:
 		typedef void(__thiscall* OriginalFn)(PVOID, unsigned long, const char*, int, int, int, int, int, int, int);
 		getvfunc<OriginalFn>(this, 67)(this, font, windowsFontName, tall, weight, blur, scanlines, flags, 0, 0);
 	}
+	
+	void GetTextSizegmod(unsigned long font, const wchar_t *text, int &wide, int &tall)
+	{
+		typedef void(__thiscall* OriginalFn)(PVOID, unsigned long, const wchar_t *, int&, int&);
+		getvfunc<OriginalFn>(this, 76)(this, font, text, wide, tall);
+	}
+	void GetCursorPositiongmod(int &x, int &y)
+	{
+		typedef void(__thiscall* OriginalFn)(void*, int &, int &);
+		return getvfunc<OriginalFn>(this, 97)(this, x, y);
+	}
+	
 	void GetTextSize(unsigned long font, const wchar_t *text, int &wide, int &tall)
 	{
 		typedef void(__thiscall* OriginalFn)(PVOID, unsigned long, const wchar_t *, int&, int&);
@@ -1993,21 +2007,6 @@ public:
 	{
 		typedef void(__thiscall* OriginalFn)(PVOID, const char*);
 		getvfunc<OriginalFn>(this, 78)(this, sound);
-	}
-};
-
-class ISurfaceGmod
-{
-public:
-	void GetTextSize(unsigned long font, const wchar_t *text, int &wide, int &tall)
-	{
-		typedef void(__thiscall* OriginalFn)(PVOID, unsigned long, const wchar_t *, int&, int&);
-		getvfunc<OriginalFn>(this, 76)(this, font, text, wide, tall);
-	}
-	void GetCursorPosition(int &x, int &y)
-	{
-		typedef void(__thiscall* OriginalFn)(void*, int &, int &);
-		return getvfunc<OriginalFn>(this, 97)(this, x, y);
 	}
 };
 
@@ -2528,7 +2527,6 @@ public:
 	EngineClient* Engine;
 	IPanel* Panels;
 	ISurface* Surface;
-	ISurfaceGmod* SurfaceGmod;
 	ClientModeShared* ClientMode;
 	CHLClient* Client;
 	IEngineTrace* EngineTrace;

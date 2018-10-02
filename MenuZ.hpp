@@ -95,7 +95,14 @@ void CMenu::Draw(int iMenuWidth, int iMenuHeight, int iSWidth, int iSHeight)
 
 void CMenu::GetMousePos()
 {
-	gInts.Surface->GetCursorPosition(iMouseX, iMouseY);
+	if (GAME_GMOD)
+	{
+		gInts.Surface->GetCursorPositiongmod(iMouseX, iMouseY);
+	}
+	else
+	{
+		gInts.Surface->GetCursorPosition(iMouseX, iMouseY);
+	}
 }
 
 void CMenu::GetClicked()
